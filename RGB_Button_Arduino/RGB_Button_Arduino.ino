@@ -3,7 +3,7 @@
 #define DEBUG
 
 #define transDelay 0
-#define stepSize 21
+#define stepSize 585
 
 #define clk 4
 #define dout 5
@@ -20,6 +20,9 @@ struct led{
 };
 struct led* myLEDs;
 
+uint16_t oldRedGoal;
+uint16_t oldGreenGoal;
+uint16_t oldBlueGoal;
 
 void setup(){
 	CCD.begin();
@@ -35,8 +38,6 @@ void setup(){
 	}
 
 	myLEDs = new led[8];
-	int rgbIndex = 0;
-	int rgbGoalIndex = 1;
 	for(int i = 0; i < 4; i++){
 		myLEDs[i].ledNum = i;
 		myLEDs[i + 4].ledNum = i + 4;
@@ -47,22 +48,31 @@ void setup(){
 			myLEDs[i + 4].rgbGoal[j] = 0;
 		}
 
-		myLEDs[i].rgb[rgbIndex] = 4095;
-		myLEDs[i + 4].rgb[rgbIndex] = 4095;
-		if(rgbIndex == 2){
-			rgbIndex = 0;
-		}
-		else{
-			rgbIndex++;
-		}
+		switch(i){
+			case 0:
+			case 3:
+				myLEDs[i].rgb[0] = 4095;
+				myLEDs[i + 4].rgb[0] = 4095;
 
-		myLEDs[i].rgbGoal[rgbGoalIndex] = 4095;
-		myLEDs[i + 4].rgbGoal[rgbGoalIndex] = 4095;
-		if(rgbGoalIndex == 2){
-			rgbGoalIndex = 0;
-		}
-		else{
-			rgbGoalIndex++;
+				myLEDs[i].rgbGoal[1] = 4095;
+				myLEDs[i + 4].rgbGoal[1] = 4095;
+				break;
+
+			case 1:
+				myLEDs[i].rgb[2] = 4095;
+				myLEDs[i + 4].rgb[2] = 4095;
+
+				myLEDs[i].rgbGoal[0] = 4095;
+				myLEDs[i + 4].rgbGoal[0] = 4095;
+				break;
+
+			case 2:
+				myLEDs[i].rgb[1] = 4095;
+				myLEDs[i + 4].rgb[1] = 4095;
+
+				myLEDs[i].rgbGoal[2] = 4095;
+				myLEDs[i + 4].rgbGoal[2] = 4095;
+				break;
 		}
 
 		CCD.setLED(i, myLEDs[i].rgb[0], myLEDs[i].rgb[1], myLEDs[i].rgb[2]);
@@ -75,6 +85,10 @@ void setup(){
 			Serial.print(i + 4);
 			Serial.println(" initialized\n");
 		#endif
+
+		oldRedGoal = 0;
+		oldGreenGoal = 0;
+		oldBlueGoal = 0;
 	}
 
 	#ifdef DEBUG
@@ -122,16 +136,19 @@ void setup(){
 }
 
 void loop(){
-	do{
+	while(!goalAchieved(myLEDs)){
 		for(int i = 0; i < 8; i++){
 			fadeStep(myLEDs[i]);
 		}
-	} while(!goalAchieved(myLEDs));
+	}
 
 	for(int i = 0; i < 8; i++){
-		myLEDs[i].rgbGoal[0] = myLEDs[i].rgbGoal[2];
-		myLEDs[i].rgbGoal[1] = myLEDs[i].rgbGoal[0];
-		myLEDs[i].rgbGoal[2] = myLEDs[i].rgbGoal[1];
+		oldRedGoal = myLEDs[i].rgbGoal[0];
+		oldGreenGoal = myLEDs[i].rgbGoal[1];
+		oldBlueGoal = myLEDs[i].rgbGoal[2];
+		myLEDs[i].rgbGoal[0] = oldBlueGoal;
+		myLEDs[i].rgbGoal[1] = oldRedGoal;
+		myLEDs[i].rgbGoal[2] = oldGreenGoal;
 	}
 
 	#ifdef DEBUG
