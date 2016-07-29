@@ -3,7 +3,7 @@
 //#define DEBUG
 
 #define transDelay 0 // Delay after writing new LED values
-#define stepSize 585 // How far to step through the 12-bit values for LED brightness
+#define stepSize 585 // How far to step through the 12-bit values for LED brightness - must be a factor of 4095
 
 #define clk 4 // Data clock
 #define dout 5 // Data output to CCD
