@@ -3,7 +3,8 @@
 //#define DEBUG
 
 #define transDelay 0                                                        // Delay after writing new LED values
-#define stepSize 585                                                        // How far to step through the 12-bit values for LED brightness - must be a factor of 4095
+#define holdDelay 200 														// Delay to hold the goal values
+#define stepSize 195                                                        // How far to step through the 12-bit values for LED brightness - must be a factor of 4095
 
 #define clk 4                                                               // Data clock
 #define dout 5                                                              // Data output to CCD
@@ -163,6 +164,8 @@ void loop(){
 		myLEDs[i].rgbGoal[1] = oldRedGoal;
 		myLEDs[i].rgbGoal[2] = oldGreenGoal;
 	}
+
+	delay(holdDelay);
 
 	#ifdef DEBUG                                                            // If in debug mode
 		Serial.println("Next stage RGB values:");
