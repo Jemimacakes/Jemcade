@@ -2,6 +2,8 @@
 
 //#define DEBUG
 
+#define numBoards 1															// Number of linked TLC5947s
+
 #define transDelay 0                                                        // Delay after writing new LED values
 #define holdDelay 200 														// Delay to hold the goal values
 #define stepSize 195                                                        // How far to step through the 12-bit values for LED brightness - must be a factor of 4095
@@ -12,7 +14,7 @@
 #define oe_n -1                                                             // Data output enable
 
 
-Adafruit_TLC5947 CCD(1, clk, dout, lat);                                    // Instantiate TLC5947 constant current driver
+Adafruit_TLC5947 CCD(numBoards, clk, dout, lat);                            // Instantiate TLC5947 constant current driver
 
 // LED struct object for holding data relating to individual RGB channels on the TLC5947 //
 struct led{
@@ -43,55 +45,40 @@ void setup(){
 
 	// Allocate and initialize LEDs - Initialize LEDs for a 2x4 arrangement where //
 	// LEDs in the same column are identical //
-	myLEDs = new led[8];                                                    // Allocate memory for the LEDs 
-	for(int i = 0; i < 4; i++){
+	myLEDs = new led[numBoards * 8];                                        // Allocate memory for the LEDs 
+	for(int i = 0; i < (numBoards * 8); i++){
 		myLEDs[i].ledNum     = i;                                           // Set LED identification numbers
-		myLEDs[i + 4].ledNum = i + 4;
 		for(int j = 0; j < 3; j++){
 			myLEDs[i].rgb[j]         = 0;                                   // Initialize values to 0
-			myLEDs[i].rgbGoal[j]     = 0;
-			myLEDs[i + 4].rgb[j]     = 0;                                   // Initialize goals to 0
-			myLEDs[i + 4].rgbGoal[j] = 0;
+			myLEDs[i].rgbGoal[j]     = 0;									// Initialize goals to 0
 		}
 
 		// Initialize each column's starting values and starting goals //
-		switch(i){
+		switch(i % 8){
 			case 0:                                                         // Columns 0 and 3 are the same
 			case 3:
 				myLEDs[i].rgb[0]         = 4095;                            // Start red
-				myLEDs[i + 4].rgb[0]     = 4095;
-
 				myLEDs[i].rgbGoal[1]     = 4095;                            // Move to green
-				myLEDs[i + 4].rgbGoal[1] = 4095;
 				break;
 
 			case 1:
 				myLEDs[i].rgb[2]         = 4095;                            // Start blue
-				myLEDs[i + 4].rgb[2]     = 4095;
-
 				myLEDs[i].rgbGoal[0]     = 4095;                            // Move to red
-				myLEDs[i + 4].rgbGoal[0] = 4095;
 				break;
 
 			case 2:
 				myLEDs[i].rgb[1]         = 4095;                            // Start green
-				myLEDs[i + 4].rgb[1]     = 4095;
-
 				myLEDs[i].rgbGoal[2]     = 4095;                            // Move to blue
-				myLEDs[i + 4].rgbGoal[2] = 4095;
 				break;
 		}
 
 		// Write initial values to TLC5947 //
 		CCD.setLED(i, myLEDs[i].rgb[0], myLEDs[i].rgb[1], myLEDs[i].rgb[2]);
-		CCD.setLED(i + 4, myLEDs[i + 4].rgb[0], myLEDs[i + 4].rgb[1], myLEDs[i + 4].rgb[2]);
 
 		#ifdef DEBUG                                                        // If in debug mode
 			// Mark each loops with confirmation printout //
 			Serial.print("LED ");
 			Serial.print(i);
-			Serial.print(" & ");
-			Serial.print(i + 4);
 			Serial.println(" initialized\n");
 		#endif
 
@@ -151,12 +138,12 @@ void setup(){
 // Arduino loop() function //
 void loop(){
 	while(!goalAchieved(myLEDs)){
-		for(int i = 0; i < 8; i++){
+		for(int i = 0; i < (numBoards * 8); i++){
 			fadeStep(myLEDs[i]);
 		}
 	}
 
-	for(int i = 0; i < 8; i++){
+	for(int i = 0; i < (numBoards * 8); i++){
 		oldRedGoal           = myLEDs[i].rgbGoal[0];
 		oldGreenGoal         = myLEDs[i].rgbGoal[1];
 		oldBlueGoal          = myLEDs[i].rgbGoal[2];
