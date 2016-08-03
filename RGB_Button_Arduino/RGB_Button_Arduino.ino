@@ -28,7 +28,13 @@ uint16_t oldRedGoal;                                                        // O
 uint16_t oldGreenGoal;                                                      // Old green goal value for rotating goals after transmission
 uint16_t oldBlueGoal;                                                       // Old blue goal value for rotating goals after transmission
 
-// Arduino setup() function //
+/****************************************************************
+Name: setup()
+Inputs: none
+Outputs: none
+Description: Standard Arduino setup function. Initializes values
+			 and calls begin for features.
+*****************************************************************/
 void setup(){
 	CCD.begin();                                                            // Start TLC5947 communications
 
@@ -135,7 +141,12 @@ void setup(){
 	CCD.write();
 }
 
-// Arduino loop() function //
+/****************************************************************
+Name: loop()
+Inputs: none
+Outputs: none
+Description: Standard Arduino loop function. Loops indefinitely.
+*****************************************************************/
 void loop(){
 	while(!goalAchieved(myLEDs)){
 		for(int i = 0; i < (numBoards * 8); i++){
@@ -196,7 +207,13 @@ void loop(){
 	#endif
 }
 
-// fadeStep() function takes and LED and adjusts its values by one stepSize //
+/****************************************************************
+Name: fadeStep()
+Inputs: myLED - led object for adjustment. Pass by reference.
+Outputs: none
+Description: Adjusts RGB values by one stepSize toward its goal
+			 value.
+*****************************************************************/
 void fadeStep(struct led &myLED){
 		if(myLED.rgb[0] < myLED.rgbGoal[0]){
 			myLED.rgb[0] += stepSize;                                       // Step red by one stepSize up if it is less than its goal
@@ -243,11 +260,17 @@ void fadeStep(struct led &myLED){
 		delay(transDelay);                                                  // Wait for the delay time
 }
 
-// goalAchieved() function returns a boolean representing if all of the LEDs are at //
-// their goals //
+/****************************************************************
+Name: goalAchieved()
+Inputs: myLEDs - Array of led objects to check
+Outputs: boolean
+Description: Checks RGB values vs RGB goals and returns a
+			 boolean representing whether or not all the values
+			 match the goals.
+*****************************************************************/
 bool goalAchieved(led myLEDs[]){
 	// Check each LED for goals matching their values //
-	for(int i = 0; i < 8; i++){
+	for(int i = 0; i < (numBoards * 8); i++){
 		if(myLEDs[i].rgb[0]      != myLEDs[i].rgbGoal[0]){                  // Check red value against its goal
 			#ifdef DEBUG                                                    // If in debug mode
 				// Print out confirmation of entering this if statment //
