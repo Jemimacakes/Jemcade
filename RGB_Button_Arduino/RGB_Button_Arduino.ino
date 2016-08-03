@@ -262,6 +262,10 @@ void flow(int numLoops, int transDelay, int holdDelay, int stepSize, String dire
 /****************************************************************
 Name: fadeStep()
 Inputs: myLED - led object for adjustment. Pass by reference.
+		transDelay - Integer representing how long to delay
+					 between steps.
+		stepSize - How big of a step to make. This must be
+				   a factor of 4095.
 Outputs: none
 Description: Adjusts RGB values by one stepSize toward its goal
 			 value.
