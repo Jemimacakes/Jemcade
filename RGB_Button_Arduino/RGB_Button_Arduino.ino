@@ -4,10 +4,6 @@
 
 #define numBoards 1															// Number of linked TLC5947s
 
-#define transDelay 0                                                        // Delay after writing new LED values
-#define holdDelay 200 														// Delay to hold the goal values
-#define stepSize 195                                                        // How far to step through the 12-bit values for LED brightness - must be a factor of 4095
-
 #define clk 4                                                               // Data clock
 #define dout 5                                                              // Data output to CCD
 #define lat 6                                                               // Data latch signal
@@ -137,67 +133,122 @@ void setup(){
 
 // Arduino loop() function //
 void loop(){
-	while(!goalAchieved(myLEDs)){
+	flow(5, 0, 200, 195, "right");
+}
+
+
+// Smooth fade function, colors flow by fading in direction direction //
+void flow(int numLoops, int transDelay, int holdDelay, int stepSize, String direction){
+	// Set RGB goals for transition //
+	for(int i = 0; i <= (numBoards * 8); i++){
+		if(direction == "right"){
+			switch(i % 8){
+				case 0:                                                         // Columns 0 and 3 are the same
+				case 3:
+					myLEDs[i].rgbGoal[1]     = 4095;                            // Move to green
+					break;
+		
+				case 1:
+					myLEDs[i].rgbGoal[0]     = 4095;                            // Move to red
+					break;
+		
+				case 2:
+					myLEDs[i].rgbGoal[2]     = 4095;                            // Move to blue
+					break;
+			}
+		}
+		else if(direction == "left"){
+			switch(i % 8){
+				case 0:                                                         // Columns 0 and 3 are the same
+				case 3:
+					myLEDs[i].rgbGoal[2]     = 4095;                            // Move to blue
+					break;
+		
+				case 1:
+					myLEDs[i].rgbGoal[1]     = 4095;                            // Move to green
+					break;
+		
+				case 2:
+					myLEDs[i].rgbGoal[0]     = 4095;                            // Move to red
+					break;
+			}
+		}
+	}
+
+	for(int i = 0; i < numLoops; i++){
+		// While the goals are not reached, step towards them //
+		while(!goalAchieved(myLEDs)){
+			for(int i = 0; i < (numBoards * 8); i++){
+				fadeStep(myLEDs[i], transDelay, stepSize);
+			}
+		}
+	
 		for(int i = 0; i < (numBoards * 8); i++){
-			fadeStep(myLEDs[i]);
+			if(direction == "right"){
+				oldRedGoal           = myLEDs[i].rgbGoal[0];
+				oldGreenGoal         = myLEDs[i].rgbGoal[1];
+				oldBlueGoal          = myLEDs[i].rgbGoal[2];
+				myLEDs[i].rgbGoal[0] = oldBlueGoal;
+				myLEDs[i].rgbGoal[1] = oldRedGoal;
+				myLEDs[i].rgbGoal[2] = oldGreenGoal;
+			}
+			else if(direction == "left"){
+				oldRedGoal           = myLEDs[i].rgbGoal[0];
+				oldGreenGoal         = myLEDs[i].rgbGoal[1];
+				oldBlueGoal          = myLEDs[i].rgbGoal[2];
+				myLEDs[i].rgbGoal[0] = oldGreenGoal;
+				myLEDs[i].rgbGoal[1] = oldBlueGoal;
+				myLEDs[i].rgbGoal[2] = oldRedGoal;
+			}
 		}
-	}
-
-	for(int i = 0; i < (numBoards * 8); i++){
-		oldRedGoal           = myLEDs[i].rgbGoal[0];
-		oldGreenGoal         = myLEDs[i].rgbGoal[1];
-		oldBlueGoal          = myLEDs[i].rgbGoal[2];
-		myLEDs[i].rgbGoal[0] = oldBlueGoal;
-		myLEDs[i].rgbGoal[1] = oldRedGoal;
-		myLEDs[i].rgbGoal[2] = oldGreenGoal;
-	}
-
-	delay(holdDelay);
-
-	#ifdef DEBUG                                                            // If in debug mode
-		Serial.println("Next stage RGB values:");
-		for(int i = 0; i < 8; i++){
-			Serial.print("RED");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgb[0]);
+	
+		delay(holdDelay);
+	
+		#ifdef DEBUG                                                            // If in debug mode
+			Serial.println("Next stage RGB values:");
+			for(int i = 0; i < 8; i++){
+				Serial.print("RED");
+				Serial.print(i);
+				Serial.print(": ");
+				Serial.println(myLEDs[i].rgb[0]);
+				
+				Serial.print("GREEN");
+				Serial.print(i);
+				Serial.print(": ");
+				Serial.println(myLEDs[i].rgb[1]);
 			
-			Serial.print("GREEN");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgb[1]);
-		
-			Serial.print("BLUE");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgb[2]);
-
-			Serial.println("");
-		}
-
-		Serial.println("Next stage RGB goals:");
-		for(int i = 0; i < 8; i++){
-			Serial.print("REDGOAL");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgbGoal[0]);
+				Serial.print("BLUE");
+				Serial.print(i);
+				Serial.print(": ");
+				Serial.println(myLEDs[i].rgb[2]);
+	
+				Serial.println("");
+			}
+	
+			Serial.println("Next stage RGB goals:");
+			for(int i = 0; i < 8; i++){
+				Serial.print("REDGOAL");
+				Serial.print(i);
+				Serial.print(": ");
+				Serial.println(myLEDs[i].rgbGoal[0]);
+				
+				Serial.print("GREENGOAL");
+				Serial.print(i);
+				Serial.print(": ");
+				Serial.println(myLEDs[i].rgbGoal[1]);
 			
-			Serial.print("GREENGOAL");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgbGoal[1]);
-		
-			Serial.print("BLUEGOAL");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgbGoal[2]);
-			Serial.println("");
-		}
-	#endif
+				Serial.print("BLUEGOAL");
+				Serial.print(i);
+				Serial.print(": ");
+				Serial.println(myLEDs[i].rgbGoal[2]);
+				Serial.println("");
+			}
+		#endif
+	}
 }
 
 // fadeStep() function takes and LED and adjusts its values by one stepSize //
-void fadeStep(struct led &myLED){
+void fadeStep(struct led &myLED, int transDelay, int stepSize){
 		if(myLED.rgb[0] < myLED.rgbGoal[0]){
 			myLED.rgb[0] += stepSize;                                       // Step red by one stepSize up if it is less than its goal
 		}
