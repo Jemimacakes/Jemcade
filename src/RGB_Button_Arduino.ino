@@ -26,8 +26,8 @@ uint16_t oldBlueGoal;                                                       // O
 
 /****************************************************************
 Name: setup()
-Inputs: none
-Outputs: none
+Inputs: none.
+Outputs: none.
 Description: Standard Arduino setup function. Initializes values
 			 and calls begin for features.
 *****************************************************************/
@@ -139,8 +139,8 @@ void setup(){
 
 /****************************************************************
 Name: loop()
-Inputs: none
-Outputs: none
+Inputs: none.
+Outputs: none.
 Description: Standard Arduino loop function. Loops indefinitely.
 *****************************************************************/
 void loop(){
@@ -148,7 +148,23 @@ void loop(){
 }
 
 
-// Smooth fade function, colors flow by fading in direction direction //
+/****************************************************************
+Name: flow()
+Inputs: numLoops - Integer representing how many times to loop.
+		transDelay - Integer representing how long to delay
+					 between steps.
+		holdDelay - Integer representing how long to hold the
+					goal values.
+		stepSize - Integer representing how big of a step to 
+				   make. This must be a factor of 4095.
+		direction - String representing which directin to flow.
+					Possible values:
+						- "right": flow right.
+						- "left": flow left.
+Outputs: none
+Description: flow function fades the LEDs down the line like the
+			 colors are flowing in the direction specified.
+*****************************************************************/
 void flow(int numLoops, int transDelay, int holdDelay, int stepSize, String direction){
 	// Set RGB goals for transition //
 	for(int i = 0; i <= (numBoards * 8); i++){
@@ -266,7 +282,7 @@ Inputs: myLED - led object for adjustment. Pass by reference.
 					 between steps.
 		stepSize - How big of a step to make. This must be
 				   a factor of 4095.
-Outputs: none
+Outputs: none.
 Description: Adjusts RGB values by one stepSize toward its goal
 			 value.
 *****************************************************************/
@@ -318,8 +334,8 @@ void fadeStep(struct led &myLED, int transDelay, int stepSize){
 
 /****************************************************************
 Name: goalAchieved()
-Inputs: myLEDs - Array of led objects to check
-Outputs: boolean
+Inputs: myLEDs - Array of led objects to check.
+Outputs: boolean.
 Description: Checks RGB values vs RGB goals and returns a
 			 boolean representing whether or not all the values
 			 match the goals.
