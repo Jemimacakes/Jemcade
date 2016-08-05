@@ -268,7 +268,7 @@ Description: Checks RGB values vs RGB goals and returns a
 			 boolean representing whether or not all the values
 			 match the goals.
 *****************************************************************/
-bool goalAchieved(led myLEDs[]){
+bool goalAchieved(struct led myLEDs[]){
 	// Check each LED for goals matching their values //
 	for(int i = 0; i < (numBoards * 8); i++){
 		if(myLEDs[i].rgb[0]      != myLEDs[i].rgbGoal[0]){                  // Check red value against its goal
