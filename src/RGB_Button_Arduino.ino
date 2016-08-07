@@ -2,7 +2,7 @@
 
 //#define DEBUG
 
-#define numBoards 1															// Number of linked TLC5947s
+#define numBoards 2															// Number of linked TLC5947s
 
 #define clk 4                                                               // Data clock
 #define dout 5                                                              // Data output to CCD
@@ -56,7 +56,7 @@ void setup(){
 		}
 
 		// Initialize each column's starting values and starting goals //
-		switch(i % 8){
+		switch(i % 4){
 			case 0:                                                         // Columns 0 and 3 are the same
 			case 3:
 				myLEDs[i].rgb[0]         = 4095;                            // Start red
@@ -93,7 +93,10 @@ void setup(){
 	#ifdef DEBUG                                                            // If in debug mode
 		// Print the LEDs initial values //
 		Serial.println("Post-initialization RGB values:");
-		for(int i = 0; i < 8; i++){
+		for(int i = 0; i < (numBoards * 8); i++){
+			Serial.print("LED Number: ");
+			Serial.println(myLEDs[i].ledNum);
+			
 			Serial.print("RED");
 			Serial.print(i);
 			Serial.print(": ");
@@ -114,7 +117,7 @@ void setup(){
 
 		// Print the LEDs initial goals //
 		Serial.println("Post-initialization RGB goals:");
-		for(int i = 0; i < 8; i++){
+		for(int i = 0; i < (numBoards * 8); i++){
 			Serial.print("REDGOAL");
 			Serial.print(i);
 			Serial.print(": ");
@@ -148,6 +151,7 @@ void loop(){
 }
 
 
+<<<<<<< HEAD
 /****************************************************************
 Name: flow()
 Inputs: numLoops - Integer representing how many times to loop.
@@ -233,7 +237,7 @@ void flow(int numLoops, int transDelay, int holdDelay, int stepSize, String dire
 	
 		#ifdef DEBUG                                                            // If in debug mode
 			Serial.println("Next stage RGB values:");
-			for(int i = 0; i < 8; i++){
+			for(int i = 0; i < (numBoards * 8); i++){
 				Serial.print("RED");
 				Serial.print(i);
 				Serial.print(": ");
@@ -253,7 +257,7 @@ void flow(int numLoops, int transDelay, int holdDelay, int stepSize, String dire
 			}
 	
 			Serial.println("Next stage RGB goals:");
-			for(int i = 0; i < 8; i++){
+			for(int i = 0; i < (numBoards * 8); i++){
 				Serial.print("REDGOAL");
 				Serial.print(i);
 				Serial.print(": ");
