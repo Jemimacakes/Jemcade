@@ -1,8 +1,8 @@
 #include <Adafruit_TLC5947.h>
 
-#define DEBUG
+//#define DEBUG
 
-#define numBoards 1															// Number of linked TLC5947s
+#define numBoards 2															// Number of linked TLC5947s
 
 #define transDelay 0                                                        // Delay after writing new LED values
 #define holdDelay 200 														// Delay to hold the goal values
@@ -97,7 +97,7 @@ void setup(){
 	#ifdef DEBUG                                                            // If in debug mode
 		// Print the LEDs initial values //
 		Serial.println("Post-initialization RGB values:");
-		for(int i = 0; i < 8; i++){
+		for(int i = 0; i < (numBoards * 8); i++){
 			Serial.print("LED Number: ");
 			Serial.println(myLEDs[i].ledNum);
 			
@@ -121,7 +121,7 @@ void setup(){
 
 		// Print the LEDs initial goals //
 		Serial.println("Post-initialization RGB goals:");
-		for(int i = 0; i < 8; i++){
+		for(int i = 0; i < (numBoards * 8); i++){
 			Serial.print("REDGOAL");
 			Serial.print(i);
 			Serial.print(": ");
@@ -170,7 +170,7 @@ void loop(){
 
 	#ifdef DEBUG                                                            // If in debug mode
 		Serial.println("Next stage RGB values:");
-		for(int i = 0; i < 8; i++){
+		for(int i = 0; i < (numBoards * 8); i++){
 			Serial.print("RED");
 			Serial.print(i);
 			Serial.print(": ");
@@ -190,7 +190,7 @@ void loop(){
 		}
 
 		Serial.println("Next stage RGB goals:");
-		for(int i = 0; i < 8; i++){
+		for(int i = 0; i < (numBoards * 8); i++){
 			Serial.print("REDGOAL");
 			Serial.print(i);
 			Serial.print(": ");
