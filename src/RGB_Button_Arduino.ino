@@ -1,6 +1,6 @@
 #include <Adafruit_TLC5947.h>
 
-//#define DEBUG
+#define DEBUG
 
 #define numBoards 1															// Number of linked TLC5947s
 
@@ -60,7 +60,7 @@ void setup(){
 		}
 
 		// Initialize each column's starting values and starting goals //
-		switch(i % 8){
+		switch(i % 4){
 			case 0:                                                         // Columns 0 and 3 are the same
 			case 3:
 				myLEDs[i].rgb[0]         = 4095;                            // Start red
@@ -98,6 +98,9 @@ void setup(){
 		// Print the LEDs initial values //
 		Serial.println("Post-initialization RGB values:");
 		for(int i = 0; i < 8; i++){
+			Serial.print("LED Number: ");
+			Serial.println(myLEDs[i].ledNum);
+			
 			Serial.print("RED");
 			Serial.print(i);
 			Serial.print(": ");
