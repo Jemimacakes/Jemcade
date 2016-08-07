@@ -151,7 +151,6 @@ void loop(){
 }
 
 
-<<<<<<< HEAD
 /****************************************************************
 Name: flow()
 Inputs: numLoops - Integer representing how many times to loop.
