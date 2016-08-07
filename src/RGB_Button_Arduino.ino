@@ -2,7 +2,7 @@
 
 //#define DEBUG
 
-#define numBoards 2															// Number of linked TLC5947s
+#define numBoards 1															// Number of linked TLC5947s
 
 #define clk 4                                                               // Data clock
 #define dout 5                                                              // Data output to CCD
@@ -148,6 +148,10 @@ Description: Standard Arduino loop function. Loops indefinitely.
 *****************************************************************/
 void loop(){
 	flow(5, 0, 200, 195, "right");
+
+	#ifdef DEBUG
+		while(1){};
+	#endif
 }
 
 
@@ -169,7 +173,7 @@ Description: flow function fades the LEDs down the line like the
 			 colors are flowing in the direction specified.
 *****************************************************************/
 void flow(int numLoops, int transDelay, int holdDelay, int stepSize, String direction){
-	// Set RGB goals for transition //
+	// Set RGB starting goals for transition //
 	for(int i = 0; i <= (numBoards * 8); i++){
 		if(direction == "right"){
 			switch(i % 8){
@@ -206,74 +210,83 @@ void flow(int numLoops, int transDelay, int holdDelay, int stepSize, String dire
 	}
 
 	for(int i = 0; i < numLoops; i++){
-		// While the goals are not reached, step towards them //
-		while(!goalAchieved(myLEDs)){
-			for(int i = 0; i < (numBoards * 8); i++){
-				fadeStep(myLEDs[i], transDelay, stepSize);
-			}
-		}
-	
-		for(int i = 0; i < (numBoards * 8); i++){
-			if(direction == "right"){
-				oldRedGoal           = myLEDs[i].rgbGoal[0];
-				oldGreenGoal         = myLEDs[i].rgbGoal[1];
-				oldBlueGoal          = myLEDs[i].rgbGoal[2];
-				myLEDs[i].rgbGoal[0] = oldBlueGoal;
-				myLEDs[i].rgbGoal[1] = oldRedGoal;
-				myLEDs[i].rgbGoal[2] = oldGreenGoal;
-			}
-			else if(direction == "left"){
-				oldRedGoal           = myLEDs[i].rgbGoal[0];
-				oldGreenGoal         = myLEDs[i].rgbGoal[1];
-				oldBlueGoal          = myLEDs[i].rgbGoal[2];
-				myLEDs[i].rgbGoal[0] = oldGreenGoal;
-				myLEDs[i].rgbGoal[1] = oldBlueGoal;
-				myLEDs[i].rgbGoal[2] = oldRedGoal;
-			}
-		}
-	
-		delay(holdDelay);
-	
-		#ifdef DEBUG                                                            // If in debug mode
-			Serial.println("Next stage RGB values:");
-			for(int i = 0; i < (numBoards * 8); i++){
-				Serial.print("RED");
-				Serial.print(i);
-				Serial.print(": ");
-				Serial.println(myLEDs[i].rgb[0]);
-				
-				Serial.print("GREEN");
-				Serial.print(i);
-				Serial.print(": ");
-				Serial.println(myLEDs[i].rgb[1]);
-			
-				Serial.print("BLUE");
-				Serial.print(i);
-				Serial.print(": ");
-				Serial.println(myLEDs[i].rgb[2]);
-	
-				Serial.println("");
-			}
-	
-			Serial.println("Next stage RGB goals:");
-			for(int i = 0; i < (numBoards * 8); i++){
-				Serial.print("REDGOAL");
-				Serial.print(i);
-				Serial.print(": ");
-				Serial.println(myLEDs[i].rgbGoal[0]);
-				
-				Serial.print("GREENGOAL");
-				Serial.print(i);
-				Serial.print(": ");
-				Serial.println(myLEDs[i].rgbGoal[1]);
-			
-				Serial.print("BLUEGOAL");
-				Serial.print(i);
-				Serial.print(": ");
-				Serial.println(myLEDs[i].rgbGoal[2]);
-				Serial.println("");
-			}
+		#ifdef DEBUG
+			Serial.print("flow() loop ");
+			Serial.print(i);
+			Serial.println(":");
 		#endif
+		
+		// Loop for an entire cycle //
+		for(int j = 0; j < 3; j++){
+			// While the goals are not reached, step towards them //
+			while(!goalAchieved(myLEDs)){
+				for(int k = 0; k < (numBoards * 8); k++){
+					fadeStep(myLEDs[k], transDelay, stepSize);
+				}
+			}
+
+			for(int k = 0; k < (numBoards * 8); k++){
+				if(direction == "right"){
+					oldRedGoal           = myLEDs[k].rgbGoal[0];
+					oldGreenGoal         = myLEDs[k].rgbGoal[1];
+					oldBlueGoal          = myLEDs[k].rgbGoal[2];
+					myLEDs[k].rgbGoal[0] = oldBlueGoal;
+					myLEDs[k].rgbGoal[1] = oldRedGoal;
+					myLEDs[k].rgbGoal[2] = oldGreenGoal;
+				}
+				else if(direction == "left"){
+					oldRedGoal           = myLEDs[k].rgbGoal[0];
+					oldGreenGoal         = myLEDs[k].rgbGoal[1];
+					oldBlueGoal          = myLEDs[k].rgbGoal[2];
+					myLEDs[k].rgbGoal[0] = oldGreenGoal;
+					myLEDs[k].rgbGoal[1] = oldBlueGoal;
+					myLEDs[k].rgbGoal[2] = oldRedGoal;
+				}
+			}
+	
+			#ifdef DEBUG                                                            // If in debug mode
+				Serial.println("Next stage RGB values:");
+				for(int k = 0; k < (numBoards * 8); k++){
+					Serial.print("RED");
+					Serial.print(k);
+					Serial.print(": ");
+					Serial.println(myLEDs[k].rgb[0]);
+					
+					Serial.print("GREEN");
+					Serial.print(k);
+					Serial.print(": ");
+					Serial.println(myLEDs[k].rgb[1]);
+				
+					Serial.print("BLUE");
+					Serial.print(k);
+					Serial.print(": ");
+					Serial.println(myLEDs[k].rgb[2]);
+		
+					Serial.println("");
+				}
+		
+				Serial.println("Next stage RGB goals:");
+				for(int k = 0; k < (numBoards * 8); k++){
+					Serial.print("REDGOAL");
+					Serial.print(k);
+					Serial.print(": ");
+					Serial.println(myLEDs[k].rgbGoal[0]);
+					
+					Serial.print("GREENGOAL");
+					Serial.print(k);
+					Serial.print(": ");
+					Serial.println(myLEDs[k].rgbGoal[1]);
+				
+					Serial.print("BLUEGOAL");
+					Serial.print(k);
+					Serial.print(": ");
+					Serial.println(myLEDs[k].rgbGoal[2]);
+					Serial.println("");
+				}
+			#endif
+	
+			delay(holdDelay);
+		}
 	}
 }
 
