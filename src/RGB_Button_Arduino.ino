@@ -3,21 +3,21 @@
 
 //#define DEBUG
 
-#define numBoards 1															// Number of linked TLC5947s
+#define numBoards 1                                                             // Number of linked TLC5947s
 
-#define clk 4                                                               // Data clock
-#define dout 5                                                              // Data output to CCD
-#define lat 6                                                               // Data latch signal
-#define oe_n -1                                                             // Data output enable
+#define clk 4                                                                   // Data clock
+#define dout 5                                                                  // Data output to CCD
+#define lat 6                                                                   // Data latch signal
+#define oe_n -1                                                                 // Data output enable
 
 
-Adafruit_TLC5947 CCD(numBoards, clk, dout, lat);                            // Instantiate TLC5947 constant current driver
+Adafruit_TLC5947 CCD(numBoards, clk, dout, lat);                                // Instantiate TLC5947 constant current driver
 
-led* myLEDs;	                                                            // Create pointer for dynamic array of LEDs
+led* myLEDs;                                                                    // Create pointer for dynamic array of LEDs
 
-uint16_t oldRedGoal;                                                        // Old red goal value for rotating goals after transmission
-uint16_t oldGreenGoal;                                                      // Old green goal value for rotating goals after transmission
-uint16_t oldBlueGoal;                                                       // Old blue goal value for rotating goals after transmission
+uint16_t oldRedGoal;                                                            // Old red goal value for rotating goals after transmission
+uint16_t oldGreenGoal;                                                          // Old green goal value for rotating goals after transmission
+uint16_t oldBlueGoal;                                                           // Old blue goal value for rotating goals after transmission
 
 /****************************************************************
 Name: setup()
@@ -27,49 +27,49 @@ Description: Standard Arduino setup function. Initializes values
 			 and calls begin for features.
 *****************************************************************/
 void setup(){
-	CCD.begin();                                                            // Start TLC5947 communications
+	CCD.begin();                                                                // Start TLC5947 communications
 
-	#ifdef DEBUG                                                            // If in debug mode
-		Serial.begin(9600);                                                 // Start serial communications
-		Serial.println("Begin program");                                    // Mark start of program
+	#ifdef DEBUG                                                                // If in debug mode
+		Serial.begin(9600);                                                     // Start serial communications
+		Serial.println("Begin program");                                        // Mark start of program
 	#endif
 
 	// Optional data output enable //
-	if(oe_n >= 0){                                                          // If oe_n is not 0
-		pinMode(oe_n, OUTPUT);                                              // Enable the pin as an output
-		digitalWrite(oe_n, LOW);                                            // Hold it low
+	if(oe_n >= 0){                                                              // If oe_n is not 0
+		pinMode(oe_n, OUTPUT);                                                  // Enable the pin as an output
+		digitalWrite(oe_n, LOW);                                                // Hold it low
 	}
 
 	// Allocate and initialize LEDs - Initialize LEDs for a 2x4 arrangement where //
 	// LEDs in the same column are identical //
-	myLEDs = new led[numBoards * 8];                                        // Allocate memory for the LEDs 
+	myLEDs = new led[numBoards * 8];                                            // Allocate memory for the LEDs 
 	for(int i = 0; i < (numBoards * 8); i++){
-		myLEDs[i].ledNum     = i;                                           // Set LED identification numbers
+		myLEDs[i].ledNum     = i;                                               // Set LED identification numbers
 		for(int j = 0; j < 3; j++){
-			myLEDs[i].rgb[j]         = 0;                                   // Initialize values to 0
-			myLEDs[i].rgbGoal[j]     = 0;									// Initialize goals to 0
+			myLEDs[i].rgb[j]         = 0;                                       // Initialize values to 0
+			myLEDs[i].rgbGoal[j]     = 0;                                       // Initialize goals to 0
 		}
 
 		// Initialize each column's starting values //
 		switch(i % 4){
-			case 0:                                                         // Columns 0 and 3 are the same
+			case 0:                                                             // Columns 0 and 3 are the same
 			case 3:
-				myLEDs[i].rgb[0]         = 4095;                            // Start red
+				myLEDs[i].rgb[0]         = 4095;                                // Start red
 				break;
 
 			case 1:
-				myLEDs[i].rgb[2]         = 4095;                            // Start blue
+				myLEDs[i].rgb[2]         = 4095;                                // Start blue
 				break;
 
 			case 2:
-				myLEDs[i].rgb[1]         = 4095;                            // Start green
+				myLEDs[i].rgb[1]         = 4095;                                // Start green
 				break;
 		}
 
 		// Write initial values to TLC5947 //
 		CCD.setLED(i, myLEDs[i].rgb[0], myLEDs[i].rgb[1], myLEDs[i].rgb[2]);
 
-		#ifdef DEBUG                                                        // If in debug mode
+		#ifdef DEBUG                                                            // If in debug mode
 			// Mark each loops with confirmation printout //
 			Serial.print("LED ");
 			Serial.print(i);
@@ -82,7 +82,7 @@ void setup(){
 		oldBlueGoal  = 0;
 	}
 
-	#ifdef DEBUG                                                            // If in debug mode
+	#ifdef DEBUG                                                                // If in debug mode
 		// Print the LEDs initial values //
 		Serial.println("Post-initialization RGB values:");
 		for(int i = 0; i < (numBoards * 8); i++){
@@ -153,15 +153,15 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 			switch(i % 4){
 				case 0:                                                         // Columns 0 and 3 are the same
 				case 3:
-					myLEDs[i].rgbGoal[0]	 = 0;
+					myLEDs[i].rgbGoal[0]     = 0;
 					myLEDs[i].rgbGoal[1]     = 4095;                            // Move to green
-					myLEDs[i].rgbGoal[2]	 = 0;
+					myLEDs[i].rgbGoal[2]     = 0;
 					break;
 		
 				case 1:
 					myLEDs[i].rgbGoal[0]     = 4095;                            // Move to red
-					myLEDs[i].rgbGoal[1]	 = 0;
-					myLEDs[i].rgbGoal[2]	 = 0;
+					myLEDs[i].rgbGoal[1]     = 0;
+					myLEDs[i].rgbGoal[2]     = 0;
 					break;
 		
 				case 2:
@@ -181,60 +181,20 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 					break;
 		
 				case 1:
-					myLEDs[i].rgbGoal[0]	 = 0;
+					myLEDs[i].rgbGoal[0]     = 0;
 					myLEDs[i].rgbGoal[1]     = 4095;                            // Move to green
-					myLEDs[i].rgbGoal[2]	 = 0;
+					myLEDs[i].rgbGoal[2]     = 0;
 					break;
 		
 				case 2:
 					myLEDs[i].rgbGoal[0]     = 4095;                            // Move to red
-					myLEDs[i].rgbGoal[1]	 = 0;
-					myLEDs[i].rgbGoal[2]	 = 0;
+					myLEDs[i].rgbGoal[1]     = 0;
+					myLEDs[i].rgbGoal[2]     = 0;
 					break;
 			}
 		}
 	}
 
-	#ifdef DEBUG                                                            // If in debug mode
-		Serial.println("This iteration's RGB values:");
-		for(int i = 0; i < (numBoards * 8); i++){
-			Serial.print("RED");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgb[0]);
-			
-			Serial.print("GREEN");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgb[1]);
-		
-			Serial.print("BLUE");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgb[2]);
-
-			Serial.println("");
-		}
-
-		Serial.println("This iteration's RGB goals:");
-		for(int i = 0; i < (numBoards * 8); i++){
-			Serial.print("REDGOAL");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgbGoal[0]);
-			
-			Serial.print("GREENGOAL");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgbGoal[1]);
-		
-			Serial.print("BLUEGOAL");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgbGoal[2]);
-			Serial.println("");
-		}
-	#endif
 
 	for(int i = 0; i < numLoops; i++){
 		#ifdef DEBUG
@@ -245,6 +205,47 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 		
 		// Loop for an entire cycle //
 		for(int j = 0; j < 3; j++){
+			#ifdef DEBUG                                                        // If in debug mode
+				Serial.println("This iteration's RGB values:");
+				for(int i = 0; i < (numBoards * 8); i++){
+					Serial.print("RED");
+					Serial.print(i);
+					Serial.print(": ");
+					Serial.println(myLEDs[i].rgb[0]);
+					
+					Serial.print("GREEN");
+					Serial.print(i);
+					Serial.print(": ");
+					Serial.println(myLEDs[i].rgb[1]);
+				
+					Serial.print("BLUE");
+					Serial.print(i);
+					Serial.print(": ");
+					Serial.println(myLEDs[i].rgb[2]);
+		
+					Serial.println("");
+				}
+		
+				Serial.println("This iteration's RGB goals:");
+				for(int i = 0; i < (numBoards * 8); i++){
+					Serial.print("REDGOAL");
+					Serial.print(i);
+					Serial.print(": ");
+					Serial.println(myLEDs[i].rgbGoal[0]);
+					
+					Serial.print("GREENGOAL");
+					Serial.print(i);
+					Serial.print(": ");
+					Serial.println(myLEDs[i].rgbGoal[1]);
+				
+					Serial.print("BLUEGOAL");
+					Serial.print(i);
+					Serial.print(": ");
+					Serial.println(myLEDs[i].rgbGoal[2]);
+					Serial.println("");
+				}
+			#endif
+
 			// While the goals are not reached, step towards them //
 			while(!goalAchieved(myLEDs)){
 				for(int k = 0; k < (numBoards * 8); k++){
@@ -290,27 +291,27 @@ Description: Adjusts RGB values by one stepSize toward its goal
 *****************************************************************/
 void fadeStep(struct led &myLED, int transDelay, int stepSize){
 		if(myLED.rgb[0] < myLED.rgbGoal[0]){
-			myLED.rgb[0] += stepSize;                                       // Step red by one stepSize up if it is less than its goal
+			myLED.rgb[0] += stepSize;                                           // Step red by one stepSize up if it is less than its goal
 		}
 		else if(myLED.rgb[0] > myLED.rgbGoal[0]){
-			myLED.rgb[0] -= stepSize;                                       // Step red by one stepSize down if it is more than its goal
+			myLED.rgb[0] -= stepSize;                                           // Step red by one stepSize down if it is more than its goal
 		}
 
 		if(myLED.rgb[1] < myLED.rgbGoal[1]){
-			myLED.rgb[1] += stepSize;                                       // Step green by one stepSize up if it is less than its goal
+			myLED.rgb[1] += stepSize;                                           // Step green by one stepSize up if it is less than its goal
 		}
 		else if(myLED.rgb[1] > myLED.rgbGoal[1]){
-			myLED.rgb[1] -= stepSize;                                       // Step green by one stepSize down if it is more than its goal
+			myLED.rgb[1] -= stepSize;                                           // Step green by one stepSize down if it is more than its goal
 		}
 
 		if(myLED.rgb[2] < myLED.rgbGoal[2]){
-			myLED.rgb[2] += stepSize;                                       // Step blue by one stepSize up if it is less than its goal
+			myLED.rgb[2] += stepSize;                                           // Step blue by one stepSize up if it is less than its goal
 		}
 		else if(myLED.rgb[2] > myLED.rgbGoal[2]){
-			myLED.rgb[2] -= stepSize;                                       // Step blue by one stepSize down if it is more than its goal
+			myLED.rgb[2] -= stepSize;                                           // Step blue by one stepSize down if it is more than its goal
 		}
 
-		#ifdef DEBUG                                                        // If in debug mode
+		#ifdef DEBUG                                                            // If in debug mode
 			// Print out new RGB values written to TLC5947 //
 			Serial.println("Write values:");
 			Serial.print("RED");
@@ -328,10 +329,10 @@ void fadeStep(struct led &myLED, int transDelay, int stepSize){
 			Serial.println("");
 		#endif
 
-		CCD.setLED(myLED.ledNum, myLED.rgb[0], myLED.rgb[1], myLED.rgb[2]); // Write new values to the TLC5947
-		CCD.write();                                                        // Latch in new values
+		CCD.setLED(myLED.ledNum, myLED.rgb[0], myLED.rgb[1], myLED.rgb[2]);     // Write new values to the TLC5947
+		CCD.write();                                                            // Latch in new values
 
-		delay(transDelay);                                                  // Wait for the delay time
+		delay(transDelay);                                                      // Wait for the delay time
 }
 
 /****************************************************************
@@ -345,32 +346,32 @@ Description: Checks RGB values vs RGB goals and returns a
 bool goalAchieved(struct led myLEDs[]){
 	// Check each LED for goals matching their values //
 	for(int i = 0; i < (numBoards * 8); i++){
-		if(myLEDs[i].rgb[0]      != myLEDs[i].rgbGoal[0]){                  // Check red value against its goal
-			#ifdef DEBUG                                                    // If in debug mode
+		if(myLEDs[i].rgb[0]      != myLEDs[i].rgbGoal[0]){                      // Check red value against its goal
+			#ifdef DEBUG                                                        // If in debug mode
 				// Print out confirmation of entering this if statment //
 				Serial.println("goalAchieved red check returned false");
 			#endif;
-			return false;                                                   // return false if they are not equal
+			return false;                                                       // return false if they are not equal
 		}
-		else if(myLEDs[i].rgb[1] != myLEDs[i].rgbGoal[1]){                  // Check red value against its goal
-			#ifdef DEBUG                                                    // If in debug mode
+		else if(myLEDs[i].rgb[1] != myLEDs[i].rgbGoal[1]){                      // Check red value against its goal
+			#ifdef DEBUG                                                        // If in debug mode
 				// Print out confirmation of entering this if statment //
 				Serial.println("goalAchieved green check returned false");
 			#endif;
-			return false;                                                   // return false if they are not equal
+			return false;                                                       // return false if they are not equal
 		}
-		else if(myLEDs[i].rgb[2] != myLEDs[i].rgbGoal[2]){                  // Check red value against its goal
-			#ifdef DEBUG                                                    // If in debug mode
+		else if(myLEDs[i].rgb[2] != myLEDs[i].rgbGoal[2]){                      // Check red value against its goal
+			#ifdef DEBUG                                                        // If in debug mode
 				// Print out confirmation of entering this if statment //
 				Serial.println("goalAchieved blue check returned false");
 			#endif;
-			return false;                                                   // return false if they are not equal
+			return false;                                                       // return false if they are not equal
 		}
 	}
 
-	#ifdef DEBUG                                                            // If in debug mode
+	#ifdef DEBUG                                                                // If in debug mode
 		// Print out confirmation that no if statment was entered //
 		Serial.println("goalAchieved returned true");
 	#endif;
-	return true;                                                            // Return true of they are all equal
+	return true;                                                                // Return true of they are all equal
 }
