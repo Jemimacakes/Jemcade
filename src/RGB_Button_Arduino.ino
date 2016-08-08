@@ -1,4 +1,5 @@
 #include <Adafruit_TLC5947.h>
+#include "RGB_Button_Arduino.h"
 
 //#define DEBUG
 
@@ -12,13 +13,7 @@
 
 Adafruit_TLC5947 CCD(numBoards, clk, dout, lat);                            // Instantiate TLC5947 constant current driver
 
-// LED struct object for holding data relating to individual RGB channels on the TLC5947 //
-struct led{
-	uint16_t ledNum;                                                        // LED channel number
-	uint16_t rgb[3];                                                        // Current RGB values
-	uint16_t rgbGoal[3];                                                    // Target RGB values
-};
-struct led* myLEDs;                                                         // Create pointer for dynamic array of LEDs
+led* myLEDs;	                                                            // Create pointer for dynamic array of LEDs
 
 uint16_t oldRedGoal;                                                        // Old red goal value for rotating goals after transmission
 uint16_t oldGreenGoal;                                                      // Old green goal value for rotating goals after transmission
@@ -124,8 +119,8 @@ Outputs: none.
 Description: Standard Arduino loop function. Loops indefinitely.
 *****************************************************************/
 void loop(){
-	flow(5, 0, 0, 455, "right");
-	flow(5, 0, 0, 455, "left");
+	flow(5, 0, 0, S20, "right");
+	flow(5, 0, 0, S20, "left");
 
 	#ifdef DEBUG
 		while(1){};
@@ -140,8 +135,9 @@ Inputs: numLoops - Integer representing how many times to loop.
 					 between steps.
 		holdDelay - Integer representing how long to hold the
 					goal values.
-		stepSize - Integer representing how big of a step to 
-				   make. This must be a factor of 4095.
+		speed - Speed object representing stepSize to pass to
+				fadeStep.
+				Possible values: S1 - S24
 		direction - String representing which directin to flow.
 					Possible values:
 						- "right": flow right.
@@ -150,7 +146,7 @@ Outputs: none
 Description: flow function fades the LEDs down the line like the
 			 colors are flowing in the direction specified.
 *****************************************************************/
-void flow(int numLoops, int transDelay, int holdDelay, int stepSize, String direction){
+void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direction){
 	// Set RGB starting goals for transition //
 	for(int i = 0; i <= (numBoards * 8); i++){
 		if(direction == "right"){
@@ -252,7 +248,7 @@ void flow(int numLoops, int transDelay, int holdDelay, int stepSize, String dire
 			// While the goals are not reached, step towards them //
 			while(!goalAchieved(myLEDs)){
 				for(int k = 0; k < (numBoards * 8); k++){
-					fadeStep(myLEDs[k], transDelay, stepSize);
+					fadeStep(myLEDs[k], transDelay, speed);
 				}
 			}
 
