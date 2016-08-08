@@ -1,6 +1,6 @@
 #include <Adafruit_TLC5947.h>
 
-#define DEBUG
+//#define DEBUG
 
 #define numBoards 1															// Number of linked TLC5947s
 
