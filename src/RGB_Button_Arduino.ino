@@ -147,7 +147,7 @@ Outputs: none.
 Description: Standard Arduino loop function. Loops indefinitely.
 *****************************************************************/
 void loop(){
-	flow(5, 0, 0, 455, "right");
+	flow(5, 0, 0, 455, "left");
 
 	#ifdef DEBUG
 		while(1){};
