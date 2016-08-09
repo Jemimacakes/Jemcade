@@ -272,41 +272,40 @@ void fadeStep(struct led &myLED, int transDelay, int stepSize){
 
 /****************************************************************
 Name: goalAchieved()
-Inputs: myLEDs - Array of led objects to check.
+Inputs: none
 Outputs: boolean.
 Description: Checks RGB values vs RGB goals and returns a
 			 boolean representing whether or not all the values
 			 match the goals.
 *****************************************************************/
-bool goalAchieved(struct led myLEDs[]){
-	// Check each LED for goals matching their values //
-	for(int i = 0; i < (numBoards * 8); i++){
-		if(myLEDs[i].rgb[0]      != myLEDs[i].rgbGoal[0]){                      // Check red value against its goal
-			#ifdef DEBUG                                                        // If in debug mode
-				// Print out confirmation of entering this if statment //
-				Serial.println("goalAchieved red check returned false");
-			#endif;
-			return false;                                                       // return false if they are not equal
-		}
-		else if(myLEDs[i].rgb[1] != myLEDs[i].rgbGoal[1]){                      // Check red value against its goal
-			#ifdef DEBUG                                                        // If in debug mode
-				// Print out confirmation of entering this if statment //
-				Serial.println("goalAchieved green check returned false");
-			#endif;
-			return false;                                                       // return false if they are not equal
-		}
-		else if(myLEDs[i].rgb[2] != myLEDs[i].rgbGoal[2]){                      // Check red value against its goal
-			#ifdef DEBUG                                                        // If in debug mode
-				// Print out confirmation of entering this if statment //
-				Serial.println("goalAchieved blue check returned false");
-			#endif;
-			return false;                                                       // return false if they are not equal
+bool goalAchieved(){
+	for(int i = 0; i < numBoards; i++){
+		for(int j = 0; j < rows; j++){
+			for(int k = 0; k < cols; k++){
+				if(myLEDs[i][j][k].rgb[0] != myLEDs[i][j][k].rgbGoal[0]){
+					#ifdef DEBUG
+						Serial.println("goalAchieved() red check returned false");
+					#endif
+					return false;
+				}
+				else if(myLEDs[i][j][k].rgb[1] != myLEDs[i][j][k].rgbGoal[1]){
+					#ifdef DEBUG
+						Serial.println("goalAchieved() green check returned false");
+					#endif
+					return false;
+				}
+				else if(myLEDs[i][j][k].rgb[2] != myLEDs[i][j][k].rgbGoal[2]){
+					#ifdef DEBUG
+						Serial.println("goalAchieved() blue check returned false");
+					#endif
+					return false;
+				}
+			}
 		}
 	}
 
-	#ifdef DEBUG                                                                // If in debug mode
-		// Print out confirmation that no if statment was entered //
-		Serial.println("goalAchieved returned true");
-	#endif;
-	return true;                                                                // Return true of they are all equal
+	#ifdef DEBUG
+		Serial.println("goalAchieved() returned true");
+	#endif
+	return true;
 }
