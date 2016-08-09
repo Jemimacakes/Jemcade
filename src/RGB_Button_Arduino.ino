@@ -324,6 +324,25 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 
 
 /****************************************************************
+Name: zigZag()
+Inputs: numLoops - Integer representing how many times to loop.
+		transDelay - Integer representing how long to delay
+					 between steps.
+		holdDelay - Integer representing how long to hold the
+					goal values.
+		speed - Speed object representing stepSize to pass to
+				fadeStep.
+				Possible values: S1 - S24
+Outputs: none
+Description: zigZag draws a zig zag and swaps its orientation
+			 while changing colors.
+*****************************************************************/
+void zigZag(int numLoops, int transDelay, int holdDelay, Speed speed){
+
+}
+
+
+/****************************************************************
 Name: fadeStep()
 Inputs: myLED - led object for adjustment. Pass by reference.
 		transDelay - Integer representing how long to delay
@@ -379,6 +398,7 @@ void fadeStep(struct led &myLED, int transDelay, int stepSize){
 
 		delay(transDelay);                                                      // Wait for the delay time
 }
+
 
 /****************************************************************
 Name: goalAchieved()
