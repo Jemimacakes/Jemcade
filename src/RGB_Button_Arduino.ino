@@ -150,40 +150,40 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 					// and the LEDs board number is even //
 					if(i % 2 == 0){
 						switch(k){
-							case 0: // and the LED is in column 0 or 3
+							case 0:                                             // and the LED is in column 0 or 3
 							case 3:
-								myLEDs[i][j][k].rgb[0] = 4095; // Set LED red
-								myLEDs[i][j][k].rgbGoal[1] = 4095; // Turn green
+								myLEDs[i][j][k].rgb[0] = 4095;                  // Set LED red
+								myLEDs[i][j][k].rgbGoal[1] = 4095;              // Turn green
 								break;
 		
-							case 1: // and the LED is in column 1
-								myLEDs[i][j][k].rgb[2] = 4095; // Set LED blue
-								myLEDs[i][j][k].rgbGoal[0] = 4095; // Turn red
+							case 1:                                             // and the LED is in column 1
+								myLEDs[i][j][k].rgb[2] = 4095;                  // Set LED blue
+								myLEDs[i][j][k].rgbGoal[0] = 4095;              // Turn red
 								break;
 		
-							case 2: // and the LED is in column 2
-								myLEDs[i][j][k].rgb[1] = 4095; // Set LED green
-								myLEDs[i][j][k].rgbGoal[2] = 4095; // Turn blue
+							case 2:                                             // and the LED is in column 2
+								myLEDs[i][j][k].rgb[1] = 4095;                  // Set LED green
+								myLEDs[i][j][k].rgbGoal[2] = 4095;              // Turn blue
 								break;
 						}
 					}
 					// and the LEDs board number is odd //
 					else{
 						switch(k){
-							case 0: // and the LED is in column 0 or 3
+							case 0:                                             // and the LED is in column 0 or 3
 							case 3:
-								myLEDs[i][j][k].rgb[2] = 4095; // Set the LED blue
-								myLEDs[i][j][k].rgbGoal[0] = 4095; // Turn red
+								myLEDs[i][j][k].rgb[2] = 4095;                  // Set the LED blue
+								myLEDs[i][j][k].rgbGoal[0] = 4095;              // Turn red
 								break;
 		
-							case 1: // and the LED is in column 1
-								myLEDs[i][j][k].rgb[1] = 4095; // Set the LED green
-								myLEDs[i][j][k].rgbGoal[2] = 4095; // Turn blue
+							case 1:                                             // and the LED is in column 1
+								myLEDs[i][j][k].rgb[1] = 4095;                  // Set the LED green
+								myLEDs[i][j][k].rgbGoal[2] = 4095;              // Turn blue
 								break;
 		
-							case 2: // and the LED is in column 2
-								myLEDs[i][j][k].rgb[0] = 4095; // Set the LED red
-								myLEDs[i][j][k].rgbGoal[1] = 4095; // Turn green
+							case 2:                                             // and the LED is in column 2
+								myLEDs[i][j][k].rgb[0] = 4095;                  // Set the LED red
+								myLEDs[i][j][k].rgbGoal[1] = 4095;              // Turn green
 								break;
 						}
 					}
@@ -193,46 +193,50 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 					// and the LEDs board number is even //
 					if(i % 2 == 0){
 						switch(k){
-							case 0: // and the LED is in column 0 or 3
+							case 0:                                             // and the LED is in column 0 or 3
 							case 3:
-								myLEDs[i][j][k].rgb[0] = 4095; // Set the LED red
-								myLEDs[i][j][k].rgbGoal[2] = 4095; // Turn blue
+								myLEDs[i][j][k].rgb[0] = 4095;                  // Set the LED red
+								myLEDs[i][j][k].rgbGoal[2] = 4095;              // Turn blue
 								break;
 		
-							case 1: // and the LED is in column 1
-								myLEDs[i][j][k].rgb[2] = 4095; // Set the LED blue
-								myLEDs[i][j][k].rgbGoal[1] = 4095; // Turn green
+							case 1:                                             // and the LED is in column 1
+								myLEDs[i][j][k].rgb[2] = 4095;                  // Set the LED blue
+								myLEDs[i][j][k].rgbGoal[1] = 4095;              // Turn green
 								break;
 		
-							case 2: // and the LED is in column 2
-								myLEDs[i][j][k].rgb[1] = 4095; // Set the LED green
-								myLEDs[i][j][k].rgbGoal[0] = 4095; // Turn red
+							case 2:                                             // and the LED is in column 2
+								myLEDs[i][j][k].rgb[1] = 4095;                  // Set the LED green
+								myLEDs[i][j][k].rgbGoal[0] = 4095;              // Turn red
 								break;
 						}
 					}
 					// and the LEDs board number is odd //
 					else{
 						switch(k){
-							case 0: // and the LED is in column 0 or 3
+							case 0:                                             // and the LED is in column 0 or 3
 							case 3:
-								myLEDs[i][j][k].rgb[2] = 4095; // Set the LED blue
-								myLEDs[i][j][k].rgbGoal[1] = 4095; // Turn green
+								myLEDs[i][j][k].rgb[2] = 4095;                  // Set the LED blue
+								myLEDs[i][j][k].rgbGoal[1] = 4095;              // Turn green
 								break;
 		
-							case 1: // and the LED is in column 1
-								myLEDs[i][j][k].rgb[1] = 4095; // Set the LED green
-								myLEDs[i][j][k].rgbGoal[0] = 4095; // Turn red
+							case 1:                                             // and the LED is in column 1
+								myLEDs[i][j][k].rgb[1] = 4095;                  // Set the LED green
+								myLEDs[i][j][k].rgbGoal[0] = 4095;              // Turn red
 								break;
 		
-							case 2: // and the LED is in column 2
-								myLEDs[i][j][k].rgb[0] = 4095; // Set the LED red
-								myLEDs[i][j][k].rgbGoal[2] = 4095; // Turn blue
+							case 2:                                             // and the LED is in column 2
+								myLEDs[i][j][k].rgb[0] = 4095;                  // Set the LED red
+								myLEDs[i][j][k].rgbGoal[2] = 4095;              // Turn blue
 								break;
 						}
 					}
 				}
 
-				#ifdef DEBUG // If in DEBUG mode
+				CCD.setLED(myLEDs[i][j][k].ledNum, myLEDs[i][j][k].rgb[0],      // Set LED RGB values in TLC5947
+						   myLEDs[i][j][k].rgb[1], myLEDs[i][j][k].rgb[2]);
+
+
+				#ifdef DEBUG                                                    // If in DEBUG mode
 					Serial.print("LED ");
 					Serial.print(myLEDs[i][j][k].ledNum);
 					Serial.println("'s flow() starting values set!");
@@ -272,10 +276,11 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 			}
 		}
 	}
+	CCD.write();                                                                // Write initial colors
 
 	// Loop numLoops times //
 	for(int x = 0; x < numLoops; x++){
-		#ifdef DEBUG // if in DEBUG mode
+		#ifdef DEBUG                                                            // if in DEBUG mode
 			Serial.print("Loop ");
 			Serial.print(x);
 			Serial.println("begin:");
@@ -302,22 +307,24 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 							oldRedGoal = myLEDs[i][j][k].rgbGoal[0];
 							oldGreenGoal = myLEDs[i][j][k].rgbGoal[1];
 							oldBlueGoal = myLEDs[i][j][k].rgbGoal[2];
-							myLEDs[i][j][k].rgbGoal[0] = oldBlueGoal; // If it was blue turn red
-							myLEDs[i][j][k].rgbGoal[1] = oldRedGoal; // If it was red turn green
-							myLEDs[i][j][k].rgbGoal[2] = oldGreenGoal; // If it was green turn blue
+							myLEDs[i][j][k].rgbGoal[0] = oldBlueGoal;           // If it was blue turn red
+							myLEDs[i][j][k].rgbGoal[1] = oldRedGoal;            // If it was red turn green
+							myLEDs[i][j][k].rgbGoal[2] = oldGreenGoal;          // If it was green turn blue
 						}
 						// If we are flowing left
 						else if(direction == "left"){
 							oldRedGoal = myLEDs[i][j][k].rgbGoal[0];
 							oldGreenGoal = myLEDs[i][j][k].rgbGoal[1];
 							oldBlueGoal = myLEDs[i][j][k].rgbGoal[2];
-							myLEDs[i][j][k].rgbGoal[0] = oldGreenGoal; // If it green turn red
-							myLEDs[i][j][k].rgbGoal[1] = oldBlueGoal; // If it was blue turn green
-							myLEDs[i][j][k].rgbGoal[2] = oldRedGoal; // If it was red turn blue
+							myLEDs[i][j][k].rgbGoal[0] = oldGreenGoal;          // If it green turn red
+							myLEDs[i][j][k].rgbGoal[1] = oldBlueGoal;           // If it was blue turn green
+							myLEDs[i][j][k].rgbGoal[2] = oldRedGoal;            // If it was red turn blue
 						}
 					}
 				}
 			}
+
+			delay(holdDelay);													// Delay before starting next color change
 		}
 	}
 }
