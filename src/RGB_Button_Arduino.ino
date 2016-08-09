@@ -125,7 +125,7 @@ Inputs: numLoops - Integer representing how many times to loop.
 		speed - Speed object representing stepSize to pass to
 				fadeStep.
 				Possible values: S1 - S24
-		direction - String representing which directin to flow.
+		direction - String representing which direction to flow.
 					Possible values:
 						- "right": flow right.
 						- "left": flow left.
@@ -327,6 +327,23 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 			delay(holdDelay);													// Delay before starting next color change
 		}
 	}
+}
+
+
+/****************************************************************
+Name: blinkDown()
+Inputs: numLoops - Integer representing how many times to loop.
+		transDelay - Integer representing how long to delay
+					 between blinks.
+		direction - String representing which direction to blink.
+					Possible values:
+						- "right": blink right.
+						- "left": blink left.
+Outputs: none
+Description: blinkDown blinks each color down once each per loop.
+*****************************************************************/
+void blinkDown(int numLoops, int transDelay, String direction){
+
 }
 
 
