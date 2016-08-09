@@ -131,42 +131,89 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 	for(int i = 0; i < numBoards; i++){
 		for(int j = 0; j < rows; j++){
 			for(int k = 0; k < cols; k++){
-				if(i % 2 == 0){
-					switch(k){
-						case 0:
-						case 3:
-							myLEDs[i][j][k].rgb[0] = 4095;
-							myLEDs[i][j][k].rgbGoal[1] = 4095;
-							break;
-	
-						case 1:
-							myLEDs[i][j][k].rgb[2] = 4095;
-							myLEDs[i][j][k].rgbGoal[0] = 4095;
-							break;
-	
-						case 2:
-							myLEDs[i][j][k].rgb[1] = 4095;
-							myLEDs[i][j][k].rgbGoal[2] = 4095;
-							break;
+				for(int x = 0; x < 3; x++){
+					myLEDs[i][j][k].rgb[x] = 0;
+					myLEDs[i][j][k].rgbGoal[x]= 0;
+				}
+
+				if(direction == "right"){
+					if(i % 2 == 0){
+						switch(k){
+							case 0:
+							case 3:
+								myLEDs[i][j][k].rgb[0] = 4095;
+								myLEDs[i][j][k].rgbGoal[1] = 4095;
+								break;
+		
+							case 1:
+								myLEDs[i][j][k].rgb[2] = 4095;
+								myLEDs[i][j][k].rgbGoal[0] = 4095;
+								break;
+		
+							case 2:
+								myLEDs[i][j][k].rgb[1] = 4095;
+								myLEDs[i][j][k].rgbGoal[2] = 4095;
+								break;
+						}
+					}
+					else{
+						switch(k){
+							case 0:
+							case 3:
+								myLEDs[i][j][k].rgb[2] = 4095;
+								myLEDs[i][j][k].rgbGoal[0] = 4095;
+								break;
+		
+							case 1:
+								myLEDs[i][j][k].rgb[1] = 4095;
+								myLEDs[i][j][k].rgbGoal[2] = 4095;
+								break;
+		
+							case 2:
+								myLEDs[i][j][k].rgb[0] = 4095;
+								myLEDs[i][j][k].rgbGoal[1] = 4095;
+								break;
+						}
 					}
 				}
 				else{
-					switch(k){
-						case 0:
-						case 3:
-							myLEDs[i][j][k].rgb[2] = 4095;
-							myLEDs[i][j][k].rgbGoal[0] = 4095;
-							break;
-	
-						case 1:
-							myLEDs[i][j][k].rgb[1] = 4095;
-							myLEDs[i][j][k].rgbGoal[2] = 4095;
-							break;
-	
-						case 2:
-							myLEDs[i][j][k].rgb[0] = 4095;
-							myLEDs[i][j][k].rgbGoal[1] = 4095;
-							break;
+					if(i % 2 == 0){
+						switch(k){
+							case 0:
+							case 3:
+								myLEDs[i][j][k].rgb[0] = 4095;
+								myLEDs[i][j][k].rgbGoal[2] = 4095;
+								break;
+		
+							case 1:
+								myLEDs[i][j][k].rgb[2] = 4095;
+								myLEDs[i][j][k].rgbGoal[1] = 4095;
+								break;
+		
+							case 2:
+								myLEDs[i][j][k].rgb[1] = 4095;
+								myLEDs[i][j][k].rgbGoal[0] = 4095;
+								break;
+						}
+					}
+					else{
+						switch(k){
+							case 0:
+							case 3:
+								myLEDs[i][j][k].rgb[2] = 4095;
+								myLEDs[i][j][k].rgbGoal[1] = 4095;
+								break;
+		
+							case 1:
+								myLEDs[i][j][k].rgb[1] = 4095;
+								myLEDs[i][j][k].rgbGoal[0] = 4095;
+								break;
+		
+							case 2:
+								myLEDs[i][j][k].rgb[0] = 4095;
+								myLEDs[i][j][k].rgbGoal[2] = 4095;
+								break;
+						}
 					}
 				}
 
