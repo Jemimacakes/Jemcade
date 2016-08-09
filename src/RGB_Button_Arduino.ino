@@ -46,6 +46,11 @@ void setup(){
 	for(int i = 0; i < numBoards; i++){
 		for(int j = 0; j < rows; j++){
 			for(int k = 0; k < cols; k++){
+				/******************************************* 
+					Apply this numbering scheme to the LEDs:
+				    7  6  5  4		15 14 13 12
+					0  1  2  3		 8  9 10 11
+				********************************************/
 				if(j % 2 == 0){
 					myLEDs[i][j][k].ledNum = (8 * (i + 1)) - (1 + k);
 				}
@@ -53,6 +58,7 @@ void setup(){
 					myLEDs[i][j][k].ledNum = (8 * i) + k;
 				}
 
+				// Clear all values and goals //
 				for(int x = 0; x < 3; x++){
 					myLEDs[i][j][k].rgb[x] = 0;
 					myLEDs[i][j][k].rgbGoal[x] = 0;
@@ -128,96 +134,105 @@ Description: flow function fades the LEDs down the line like the
 			 colors are flowing in the direction specified.
 *****************************************************************/
 void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direction){
+	// For each LED intialize the values to prevent overflow from //
+	// previous functions. //
 	for(int i = 0; i < numBoards; i++){
 		for(int j = 0; j < rows; j++){
 			for(int k = 0; k < cols; k++){
+				// Clear values //
 				for(int x = 0; x < 3; x++){
 					myLEDs[i][j][k].rgb[x] = 0;
 					myLEDs[i][j][k].rgbGoal[x]= 0;
 				}
 
+				// If we are flowing right //
 				if(direction == "right"){
+					// and the LEDs board number is even //
 					if(i % 2 == 0){
 						switch(k){
-							case 0:
+							case 0: // and the LED is in column 0 or 3
 							case 3:
-								myLEDs[i][j][k].rgb[0] = 4095;
-								myLEDs[i][j][k].rgbGoal[1] = 4095;
+								myLEDs[i][j][k].rgb[0] = 4095; // Set LED red
+								myLEDs[i][j][k].rgbGoal[1] = 4095; // Turn green
 								break;
 		
-							case 1:
-								myLEDs[i][j][k].rgb[2] = 4095;
-								myLEDs[i][j][k].rgbGoal[0] = 4095;
+							case 1: // and the LED is in column 1
+								myLEDs[i][j][k].rgb[2] = 4095; // Set LED blue
+								myLEDs[i][j][k].rgbGoal[0] = 4095; // Turn red
 								break;
 		
-							case 2:
-								myLEDs[i][j][k].rgb[1] = 4095;
-								myLEDs[i][j][k].rgbGoal[2] = 4095;
+							case 2: // and the LED is in column 2
+								myLEDs[i][j][k].rgb[1] = 4095; // Set LED green
+								myLEDs[i][j][k].rgbGoal[2] = 4095; // Turn blue
 								break;
 						}
 					}
+					// and the LEDs board number is odd //
 					else{
 						switch(k){
-							case 0:
+							case 0: // and the LED is in column 0 or 3
 							case 3:
-								myLEDs[i][j][k].rgb[2] = 4095;
-								myLEDs[i][j][k].rgbGoal[0] = 4095;
+								myLEDs[i][j][k].rgb[2] = 4095; // Set the LED blue
+								myLEDs[i][j][k].rgbGoal[0] = 4095; // Turn red
 								break;
 		
-							case 1:
-								myLEDs[i][j][k].rgb[1] = 4095;
-								myLEDs[i][j][k].rgbGoal[2] = 4095;
+							case 1: // and the LED is in column 1
+								myLEDs[i][j][k].rgb[1] = 4095; // Set the LED green
+								myLEDs[i][j][k].rgbGoal[2] = 4095; // Turn blue
 								break;
 		
-							case 2:
-								myLEDs[i][j][k].rgb[0] = 4095;
-								myLEDs[i][j][k].rgbGoal[1] = 4095;
+							case 2: // and the LED is in column 2
+								myLEDs[i][j][k].rgb[0] = 4095; // Set the LED red
+								myLEDs[i][j][k].rgbGoal[1] = 4095; // Turn green
 								break;
 						}
 					}
 				}
+				// If we are flowing left //
 				else if(direction == "left"){
+					// and the LEDs board number is even //
 					if(i % 2 == 0){
 						switch(k){
-							case 0:
+							case 0: // and the LED is in column 0 or 3
 							case 3:
-								myLEDs[i][j][k].rgb[0] = 4095;
-								myLEDs[i][j][k].rgbGoal[2] = 4095;
+								myLEDs[i][j][k].rgb[0] = 4095; // Set the LED red
+								myLEDs[i][j][k].rgbGoal[2] = 4095; // Turn blue
 								break;
 		
-							case 1:
-								myLEDs[i][j][k].rgb[2] = 4095;
-								myLEDs[i][j][k].rgbGoal[1] = 4095;
+							case 1: // and the LED is in column 1
+								myLEDs[i][j][k].rgb[2] = 4095; // Set the LED blue
+								myLEDs[i][j][k].rgbGoal[1] = 4095; // Turn green
 								break;
 		
-							case 2:
-								myLEDs[i][j][k].rgb[1] = 4095;
-								myLEDs[i][j][k].rgbGoal[0] = 4095;
+							case 2: // and the LED is in column 2
+								myLEDs[i][j][k].rgb[1] = 4095; // Set the LED green
+								myLEDs[i][j][k].rgbGoal[0] = 4095; // Turn red
 								break;
 						}
 					}
+					// and the LEDs board number is odd //
 					else{
 						switch(k){
-							case 0:
+							case 0: // and the LED is in column 0 or 3
 							case 3:
-								myLEDs[i][j][k].rgb[2] = 4095;
-								myLEDs[i][j][k].rgbGoal[1] = 4095;
+								myLEDs[i][j][k].rgb[2] = 4095; // Set the LED blue
+								myLEDs[i][j][k].rgbGoal[1] = 4095; // Turn green
 								break;
 		
-							case 1:
-								myLEDs[i][j][k].rgb[1] = 4095;
-								myLEDs[i][j][k].rgbGoal[0] = 4095;
+							case 1: // and the LED is in column 1
+								myLEDs[i][j][k].rgb[1] = 4095; // Set the LED green
+								myLEDs[i][j][k].rgbGoal[0] = 4095; // Turn red
 								break;
 		
-							case 2:
-								myLEDs[i][j][k].rgb[0] = 4095;
-								myLEDs[i][j][k].rgbGoal[2] = 4095;
+							case 2: // and the LED is in column 2
+								myLEDs[i][j][k].rgb[0] = 4095; // Set the LED red
+								myLEDs[i][j][k].rgbGoal[2] = 4095; // Turn blue
 								break;
 						}
 					}
 				}
 
-				#ifdef DEBUG
+				#ifdef DEBUG // If in DEBUG mode
 					Serial.print("LED ");
 					Serial.print(myLEDs[i][j][k].ledNum);
 					Serial.println("'s flow() starting values set!");
@@ -258,13 +273,15 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 		}
 	}
 
+	// Loop numLoops times //
 	for(int x = 0; x < numLoops; x++){
-		#ifdef DEBUG
+		#ifdef DEBUG // if in DEBUG mode
 			Serial.print("Loop ");
 			Serial.print(x);
 			Serial.println("begin:");
 		#endif 
 
+		// Loop through an entire cycle //
 		for(int y = 0; y < 3; y++){
 			while(!goalAchieved()){
 				for(int i = 0; i < numBoards; i++){
@@ -276,24 +293,27 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 				}
 			}
 
+			// For each LED, swap the goals to simulate "flow" //
 			for(int i = 0; i < numBoards; i++){
 				for(int j = 0; j < rows; j++){
 					for(int k = 0; k < cols; k++){
+						// If we are flowing right
 						if(direction == "right"){
 							oldRedGoal = myLEDs[i][j][k].rgbGoal[0];
 							oldGreenGoal = myLEDs[i][j][k].rgbGoal[1];
 							oldBlueGoal = myLEDs[i][j][k].rgbGoal[2];
-							myLEDs[i][j][k].rgbGoal[0] = oldBlueGoal;
-							myLEDs[i][j][k].rgbGoal[1] = oldRedGoal;
-							myLEDs[i][j][k].rgbGoal[2] = oldGreenGoal;
+							myLEDs[i][j][k].rgbGoal[0] = oldBlueGoal; // If it was blue turn red
+							myLEDs[i][j][k].rgbGoal[1] = oldRedGoal; // If it was red turn green
+							myLEDs[i][j][k].rgbGoal[2] = oldGreenGoal; // If it was green turn blue
 						}
+						// If we are flowing left
 						else if(direction == "left"){
 							oldRedGoal = myLEDs[i][j][k].rgbGoal[0];
 							oldGreenGoal = myLEDs[i][j][k].rgbGoal[1];
 							oldBlueGoal = myLEDs[i][j][k].rgbGoal[2];
-							myLEDs[i][j][k].rgbGoal[0] = oldGreenGoal;
-							myLEDs[i][j][k].rgbGoal[1] = oldBlueGoal;
-							myLEDs[i][j][k].rgbGoal[2] = oldRedGoal;
+							myLEDs[i][j][k].rgbGoal[0] = oldGreenGoal; // If it green turn red
+							myLEDs[i][j][k].rgbGoal[1] = oldBlueGoal; // If it was blue turn green
+							myLEDs[i][j][k].rgbGoal[2] = oldRedGoal; // If it was red turn blue
 						}
 					}
 				}
