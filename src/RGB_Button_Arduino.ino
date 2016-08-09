@@ -176,7 +176,7 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 						}
 					}
 				}
-				else{
+				else if(direction == "left"){
 					if(i % 2 == 0){
 						switch(k){
 							case 0:
@@ -259,12 +259,41 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 	}
 
 	for(int x = 0; x < numLoops; x++){
+		#ifdef DEBUG
+			Serial.print("Loop ");
+			Serial.print(x);
+			Serial.println("begin:");
+		#endif 
+
 		for(int y = 0; y < 3; y++){
 			while(!goalAchieved()){
 				for(int i = 0; i < numBoards; i++){
 					for(int j = 0; j < rows; j++){
 						for(int k = 0; k < cols; k++){
 							fadeStep(myLEDs[i][j][k], transDelay, speed);
+						}
+					}
+				}
+			}
+
+			for(int i = 0; i < numBoards; i++){
+				for(int j = 0; j < rows; j++){
+					for(int k = 0; k < cols; k++){
+						if(direction == "right"){
+							oldRedGoal = myLEDs[i][j][k].rgbGoal[0];
+							oldGreenGoal = myLEDs[i][j][k].rgbGoal[1];
+							oldBlueGoal = myLEDs[i][j][k].rgbGoal[2];
+							myLEDs[i][j][k].rgbGoal[0] = oldBlueGoal;
+							myLEDs[i][j][k].rgbGoal[1] = oldRedGoal;
+							myLEDs[i][j][k].rgbGoal[2] = oldGreenGoal;
+						}
+						else if(direction == "left"){
+							oldRedGoal = myLEDs[i][j][k].rgbGoal[0];
+							oldGreenGoal = myLEDs[i][j][k].rgbGoal[1];
+							oldBlueGoal = myLEDs[i][j][k].rgbGoal[2];
+							myLEDs[i][j][k].rgbGoal[0] = oldGreenGoal;
+							myLEDs[i][j][k].rgbGoal[1] = oldBlueGoal;
+							myLEDs[i][j][k].rgbGoal[2] = oldRedGoal;
 						}
 					}
 				}
