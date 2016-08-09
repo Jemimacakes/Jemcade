@@ -108,6 +108,7 @@ Description: Standard Arduino loop function. Loops indefinitely.
 void loop(){
 	flow(5, 0, 0, S20, "right");
 	flow(5, 0, 0, S20, "left");
+	zigZag(5, 0, 0, S20);
 
 	#ifdef DEBUG
 		while(1){};
@@ -279,7 +280,7 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 	CCD.write();                                                                // Write initial colors
 
 	// Loop numLoops times //
-	for(int x = 0; x < numLoops; x++){
+	for(int loop = 0; loop < numLoops; loop++){
 		#ifdef DEBUG                                                            // if in DEBUG mode
 			Serial.print("Loop ");
 			Serial.print(x);
@@ -345,7 +346,43 @@ Description: zigZag draws a zig zag and swaps its orientation
 			 while changing colors.
 *****************************************************************/
 void zigZag(int numLoops, int transDelay, int holdDelay, Speed speed){
-
+	for(int loop = 0; loop < numLoops; loop++){
+		for(int color = 0; color < 3; color++){
+			for(int dir = 0; dir < 2; dir++){
+				for(int i = 0; i < numBoards; i++){
+					for(int j = 0; j < rows; j++){
+						for(int k = 0; k < cols; k++){
+							// Clear values //
+							for(int x = 0; x < 3; x++){
+								myLEDs[i][j][k].rgb[x] = 0;
+								myLEDs[i][j][k].rgbGoal[x]= 0;
+							}
+			
+							if(myLEDs[i][j][k].ledNum % 2 != dir){
+								myLEDs[i][j][k].rgb[color] = 4095;
+							}
+			
+							CCD.setLED(myLEDs[i][j][k].ledNum, myLEDs[i][j][k].rgb[0],      // Set LED RGB values in TLC5947
+									   myLEDs[i][j][k].rgb[1], myLEDs[i][j][k].rgb[2]);
+						}
+					}
+				}
+				CCD.write();
+	
+				delay(holdDelay);
+	
+				while(!goalAchieved()){
+					for(int i = 0; i < numBoards; i++){
+						for(int j = 0; j < rows; j++){
+							for(int k = 0; k < cols; k++){
+								fadeStep(myLEDs[i][j][k], transDelay, speed);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 
