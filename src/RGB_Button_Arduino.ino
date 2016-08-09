@@ -323,6 +323,8 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 					}
 				}
 			}
+
+			delay(holdDelay);													// Delay before starting next color change
 		}
 	}
 }
