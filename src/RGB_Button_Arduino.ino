@@ -346,9 +346,13 @@ Description: zigZag draws a zig zag and swaps its orientation
 			 while changing colors.
 *****************************************************************/
 void zigZag(int numLoops, int transDelay, int holdDelay, Speed speed){
+	// Loop numLoops times //
 	for(int loop = 0; loop < numLoops; loop++){
+		// Once for each color //
 		for(int color = 0; color < 3; color++){
+			// Once for each zig-zag orientation //
 			for(int dir = 0; dir < 2; dir++){
+				// Set RGB values to full for LEDs that make up the zig-zag //
 				for(int i = 0; i < numBoards; i++){
 					for(int j = 0; j < rows; j++){
 						for(int k = 0; k < cols; k++){
@@ -358,8 +362,9 @@ void zigZag(int numLoops, int transDelay, int holdDelay, Speed speed){
 								myLEDs[i][j][k].rgbGoal[x]= 0;
 							}
 			
+							// If the LED's index is even or odd depending on dir //
 							if(myLEDs[i][j][k].ledNum % 2 != dir){
-								myLEDs[i][j][k].rgb[color] = 4095;
+								myLEDs[i][j][k].rgb[color] = 4095; // Set the color RGB value to max
 							}
 			
 							CCD.setLED(myLEDs[i][j][k].ledNum, myLEDs[i][j][k].rgb[0],      // Set LED RGB values in TLC5947
@@ -367,10 +372,11 @@ void zigZag(int numLoops, int transDelay, int holdDelay, Speed speed){
 						}
 					}
 				}
-				CCD.write();
+				CCD.write(); // Write RGB values to the TLC5947
 	
-				delay(holdDelay);
+				delay(holdDelay); // Hold for holdDelay
 	
+				// Fade to black //
 				while(!goalAchieved()){
 					for(int i = 0; i < numBoards; i++){
 						for(int j = 0; j < rows; j++){
