@@ -258,12 +258,14 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 		}
 	}
 
-	for(int i = 0; i < 3; i++){
-		while(!goalAchieved()){
-			for(int i = 0; i < numBoards; i++){
-				for(int j = 0; j < rows; j++){
-					for(int k = 0; k < cols; k++){
-						fadeStep(myLEDs[i][j][k], transDelay, speed);
+	for(int x = 0; x < numLoops; x++){
+		for(int y = 0; y < 3; y++){
+			while(!goalAchieved()){
+				for(int i = 0; i < numBoards; i++){
+					for(int j = 0; j < rows; j++){
+						for(int k = 0; k < cols; k++){
+							fadeStep(myLEDs[i][j][k], transDelay, speed);
+						}
 					}
 				}
 			}
