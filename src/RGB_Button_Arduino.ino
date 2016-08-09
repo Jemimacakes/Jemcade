@@ -4,6 +4,8 @@
 //#define DEBUG
 
 #define numBoards 1                                                             // Number of linked TLC5947s
+#define rows 2																	// Number of rows on the CCD
+#define cols 4																	// Number of cols on the CCD
 
 #define clk 4                                                                   // Data clock
 #define dout 5                                                                  // Data output to CCD
@@ -13,7 +15,7 @@
 
 Adafruit_TLC5947 CCD(numBoards, clk, dout, lat);                                // Instantiate TLC5947 constant current driver
 
-led* myLEDs;                                                                    // Create pointer for dynamic array of LEDs
+led myLEDs[numBoards][cols][rows];                                              // Create pointer for dynamic array of LEDs
 
 uint16_t oldRedGoal;                                                            // Old red goal value for rotating goals after transmission
 uint16_t oldGreenGoal;                                                          // Old green goal value for rotating goals after transmission
@@ -40,73 +42,52 @@ void setup(){
 		digitalWrite(oe_n, LOW);                                                // Hold it low
 	}
 
-	// Allocate and initialize LEDs - Initialize LEDs for a 2x4 arrangement where //
-	// LEDs in the same column are identical //
-	myLEDs = new led[numBoards * 8];                                            // Allocate memory for the LEDs 
-	for(int i = 0; i < (numBoards * 8); i++){
-		myLEDs[i].ledNum     = i;                                               // Set LED identification numbers
-		for(int j = 0; j < 3; j++){
-			myLEDs[i].rgb[j]         = 0;                                       // Initialize values to 0
-			myLEDs[i].rgbGoal[j]     = 0;                                       // Initialize goals to 0
+	// Initialize LEDs //
+	for(int i = 0; i < numBoards; i++){
+		for(int j = 0; j < rows; j++){
+			for(int k = 0; k < cols; k++){
+				if(j % 2 == 0){
+					myLEDs[i][j][k].ledNum = (8 * (i + 1)) - (1 + k);
+				}
+				else{
+					myLEDs[i][j][k].ledNum = (8 * i) + k;
+				}
+
+				for(int x = 0; x < 3; x++){
+					myLEDs[i][j][k].rgb[x] = 0;
+					myLEDs[i][j][k].rgbGoal[x] = 0;
+				}
+
+				#ifdef DEBUG
+					Serial.print("LED ");
+					Serial.print(myLEDs[i][j][k].ledNum);
+					Serial.println(" initialized!");
+
+					Serial.print("RED");
+					Serial.print(myLEDs[i][j][k].ledNum);
+					Serial.print(": ");
+					Serial.println(myLEDs[i][j][k].rgb[0]);
+
+					Serial.print("GREEN");
+					Serial.print(myLEDs[i][j][k].ledNum);
+					Serial.print(": ");
+					Serial.println(myLEDs[i][j][k].rgb[1]);
+
+					Serial.print("BLUE");
+					Serial.print(myLEDs[i][j][k].ledNum);
+					Serial.print(": ");
+					Serial.println(myLEDs[i][j][k].rgb[2]);
+
+					Serial.println();
+				#endif
+			}
 		}
-
-		// Initialize each column's starting values //
-		switch(i % 4){
-			case 0:                                                             // Columns 0 and 3 are the same
-			case 3:
-				myLEDs[i].rgb[0]         = 4095;                                // Start red
-				break;
-
-			case 1:
-				myLEDs[i].rgb[2]         = 4095;                                // Start blue
-				break;
-
-			case 2:
-				myLEDs[i].rgb[1]         = 4095;                                // Start green
-				break;
-		}
-
-		// Write initial values to TLC5947 //
-		CCD.setLED(i, myLEDs[i].rgb[0], myLEDs[i].rgb[1], myLEDs[i].rgb[2]);
-
-		#ifdef DEBUG                                                            // If in debug mode
-			// Mark each loops with confirmation printout //
-			Serial.print("LED ");
-			Serial.print(i);
-			Serial.println(" initialized\n");
-		#endif
-
-		// Initialize temporary containers //
-		oldRedGoal   = 0;
-		oldGreenGoal = 0;
-		oldBlueGoal  = 0;
 	}
 
-	#ifdef DEBUG                                                                // If in debug mode
-		// Print the LEDs initial values //
-		Serial.println("Post-initialization RGB values:");
-		for(int i = 0; i < (numBoards * 8); i++){
-			Serial.print("LED Number: ");
-			Serial.println(myLEDs[i].ledNum);
-			
-			Serial.print("RED");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgb[0]);
-			
-			Serial.print("GREEN");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgb[1]);
-		
-			Serial.print("BLUE");
-			Serial.print(i);
-			Serial.print(": ");
-			Serial.println(myLEDs[i].rgb[2]);
-
-			Serial.println("");
-		}
-	#endif
+	// Initialize temporary containers //
+	oldRedGoal   = 0;
+	oldGreenGoal = 0;
+	oldBlueGoal  = 0;
 
 	// Latch in new values and change LEDs //
 	CCD.write();
@@ -119,8 +100,8 @@ Outputs: none.
 Description: Standard Arduino loop function. Loops indefinitely.
 *****************************************************************/
 void loop(){
-	flow(5, 0, 0, S20, "right");
-	flow(5, 0, 0, S20, "left");
+	//flow(5, 0, 0, S20, "right");
+	//flow(5, 0, 0, S20, "left");
 
 	#ifdef DEBUG
 		while(1){};
