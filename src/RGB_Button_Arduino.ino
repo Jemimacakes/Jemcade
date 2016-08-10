@@ -108,6 +108,7 @@ Description: Standard Arduino loop function. Loops indefinitely.
 void loop(){
 	flow(5, 0, 0, S20, "right");
 	flow(5, 0, 0, S20, "left");
+	zigZag(5, 0, 0, S20);
 
 	#ifdef DEBUG
 		while(1){};
@@ -279,7 +280,7 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 	CCD.write();                                                                // Write initial colors
 
 	// Loop numLoops times //
-	for(int x = 0; x < numLoops; x++){
+	for(int loop = 0; loop < numLoops; loop++){
 		#ifdef DEBUG                                                            // if in DEBUG mode
 			Serial.print("Loop ");
 			Serial.print(x);
@@ -325,6 +326,67 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 			}
 
 			delay(holdDelay);													// Delay before starting next color change
+		}
+	}
+}
+
+
+/****************************************************************
+Name: zigZag()
+Inputs: numLoops - Integer representing how many times to loop.
+		transDelay - Integer representing how long to delay
+					 between steps.
+		holdDelay - Integer representing how long to hold the
+					goal values.
+		speed - Speed object representing stepSize to pass to
+				fadeStep.
+				Possible values: S1 - S24
+Outputs: none
+Description: zigZag draws a zig zag and swaps its orientation
+			 while changing colors.
+*****************************************************************/
+void zigZag(int numLoops, int transDelay, int holdDelay, Speed speed){
+	// Loop numLoops times //
+	for(int loop = 0; loop < numLoops; loop++){
+		// Once for each color //
+		for(int color = 0; color < 3; color++){
+			// Once for each zig-zag orientation //
+			for(int dir = 0; dir < 2; dir++){
+				// Set RGB values to full for LEDs that make up the zig-zag //
+				for(int i = 0; i < numBoards; i++){
+					for(int j = 0; j < rows; j++){
+						for(int k = 0; k < cols; k++){
+							// Clear values //
+							for(int x = 0; x < 3; x++){
+								myLEDs[i][j][k].rgb[x] = 0;
+								myLEDs[i][j][k].rgbGoal[x]= 0;
+							}
+			
+							// If the LED's index is even or odd depending on dir //
+							if(myLEDs[i][j][k].ledNum % 2 != dir){
+								myLEDs[i][j][k].rgb[color] = 4095; // Set the color RGB value to max
+							}
+			
+							CCD.setLED(myLEDs[i][j][k].ledNum, myLEDs[i][j][k].rgb[0],      // Set LED RGB values in TLC5947
+									   myLEDs[i][j][k].rgb[1], myLEDs[i][j][k].rgb[2]);
+						}
+					}
+				}
+				CCD.write(); // Write RGB values to the TLC5947
+	
+				delay(holdDelay); // Hold for holdDelay
+	
+				// Fade to black //
+				while(!goalAchieved()){
+					for(int i = 0; i < numBoards; i++){
+						for(int j = 0; j < rows; j++){
+							for(int k = 0; k < cols; k++){
+								fadeStep(myLEDs[i][j][k], transDelay, speed);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -386,6 +448,7 @@ void fadeStep(struct led &myLED, int transDelay, int stepSize){
 
 		delay(transDelay);                                                      // Wait for the delay time
 }
+
 
 /****************************************************************
 Name: goalAchieved()
