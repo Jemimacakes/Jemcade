@@ -21,6 +21,8 @@ uint16_t oldRedGoal;                                                            
 uint16_t oldGreenGoal;                                                          // Old green goal value for rotating goals after transmission
 uint16_t oldBlueGoal;                                                           // Old blue goal value for rotating goals after transmission
 
+int col;
+
 /****************************************************************
 Name: setup()
 Inputs: none.
@@ -404,7 +406,6 @@ Outputs: none
 Description: blinkDown blinks each color down once each per loop.
 *****************************************************************/
 void blinkDown(int numLoops, int holdDelay, String direction){
-	int col;
 	for(int color = 0; color < 3; color++){
 		if(direction == "right"){
 			col = 0;
