@@ -21,8 +21,6 @@ uint16_t oldRedGoal;                                                            
 uint16_t oldGreenGoal;                                                          // Old green goal value for rotating goals after transmission
 uint16_t oldBlueGoal;                                                           // Old blue goal value for rotating goals after transmission
 
-int col;
-
 /****************************************************************
 Name: setup()
 Inputs: none.
@@ -110,9 +108,12 @@ Description: Standard Arduino loop function. Loops indefinitely.
 void loop(){
 	flow(5, 0, 0, S20, "right");
 	flow(5, 0, 0, S20, "left");
+<<<<<<< HEAD
 	zigZag(5, 0, 0, S20);
+=======
 	blinkDown(2, 500, "right");
 	blinkDown(2, 500, "left");
+>>>>>>> blink-down
 
 	#ifdef DEBUG
 		while(1){};
@@ -392,8 +393,7 @@ void zigZag(int numLoops, int transDelay, int holdDelay, Speed speed){
 				}
 			}
 
-
-/***************************************************************			
+/***************************************************************
 Name: blinkDown()
 Inputs: numLoops - Integer representing how many times to loop.
 		holdDelay - Integer representing how long to hold values
@@ -406,6 +406,7 @@ Outputs: none
 Description: blinkDown blinks each color down once each per loop.
 *****************************************************************/
 void blinkDown(int numLoops, int holdDelay, String direction){
+	int col;
 	for(int color = 0; color < 3; color++){
 		if(direction == "right"){
 			col = 0;
@@ -465,6 +466,7 @@ void blinkDown(int numLoops, int holdDelay, String direction){
 			}
 
 			delay(holdDelay);
+>>>>>>> blink-down
 		}
 	}
 }
