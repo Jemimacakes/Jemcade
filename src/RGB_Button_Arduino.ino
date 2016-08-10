@@ -108,12 +108,9 @@ Description: Standard Arduino loop function. Loops indefinitely.
 void loop(){
 	flow(5, 0, 0, S20, "right");
 	flow(5, 0, 0, S20, "left");
-<<<<<<< HEAD
 	zigZag(5, 0, 0, S20);
-=======
 	blinkDown(2, 500, "right");
 	blinkDown(2, 500, "left");
->>>>>>> blink-down
 
 	#ifdef DEBUG
 		while(1){};
@@ -392,6 +389,9 @@ void zigZag(int numLoops, int transDelay, int holdDelay, Speed speed){
 					}
 				}
 			}
+		}
+	}
+}
 
 /***************************************************************
 Name: blinkDown()
@@ -466,7 +466,6 @@ void blinkDown(int numLoops, int holdDelay, String direction){
 			}
 
 			delay(holdDelay);
->>>>>>> blink-down
 		}
 	}
 }
