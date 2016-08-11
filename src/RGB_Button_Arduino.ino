@@ -407,65 +407,67 @@ Description: blinkDown blinks each color down once each per loop.
 *****************************************************************/
 void blinkDown(int numLoops, int holdDelay, String direction){
 	int col;
-	for(int color = 0; color < 3; color++){
-		if(direction == "right"){
-			col = 0;
-		}
-		else if(direction == "left"){
-			col = (cols - 1);
-		}
-
-		while(col >= 0 && col < cols){
-			for(int i = 0; i < numBoards; i++){
-				for(int j = 0; j < rows; j++){
-					for(int k = 0; k < cols; k++){
-						// Clear values //
-						for(int x = 0; x < 3; x++){
-							myLEDs[i][j][k].rgb[x] = 0;
-							myLEDs[i][j][k].rgbGoal[x]= 0;
-						}
-		
-						if(k == col){
-							myLEDs[i][j][k].rgb[color] = 4095;
-						}
-						
-						CCD.setLED(myLEDs[i][j][k].ledNum, myLEDs[i][j][k].rgb[0],      // Set LED RGB values in TLC5947
-								   myLEDs[i][j][k].rgb[1], myLEDs[i][j][k].rgb[2]);
-
-						#ifdef DEBUG
-							Serial.print("LED ");
-							Serial.print(myLEDs[i][j][k].ledNum);
-							Serial.println("'s new values set!");
-
-							Serial.print("RED");
-							Serial.print(myLEDs[i][j][k].ledNum);
-							Serial.print(": ");
-							Serial.println(myLEDs[i][j][k].rgb[0]);
-		
-							Serial.print("GREEN");
-							Serial.print(myLEDs[i][j][k].ledNum);
-							Serial.print(": ");
-							Serial.println(myLEDs[i][j][k].rgb[1]);
-		
-							Serial.print("BLUE");
-							Serial.print(myLEDs[i][j][k].ledNum);
-							Serial.print(": ");
-							Serial.println(myLEDs[i][j][k].rgb[2]);
-							Serial.println();
-						#endif
-					}
-				}
-			}
-			CCD.write();
-
+	for(int loop = 0; loop < numLoops; loop++){
+		for(int color = 0; color < 3; color++){
 			if(direction == "right"){
-				col++;
+				col = 0;
 			}
 			else if(direction == "left"){
-				col--;
+				col = (cols - 1);
 			}
-
-			delay(holdDelay);
+	
+			while(col >= 0 && col < cols){
+				for(int i = 0; i < numBoards; i++){
+					for(int j = 0; j < rows; j++){
+						for(int k = 0; k < cols; k++){
+							// Clear values //
+							for(int x = 0; x < 3; x++){
+								myLEDs[i][j][k].rgb[x] = 0;
+								myLEDs[i][j][k].rgbGoal[x]= 0;
+							}
+			
+							if(k == col){
+								myLEDs[i][j][k].rgb[color] = 4095;
+							}
+							
+							CCD.setLED(myLEDs[i][j][k].ledNum, myLEDs[i][j][k].rgb[0],      // Set LED RGB values in TLC5947
+									   myLEDs[i][j][k].rgb[1], myLEDs[i][j][k].rgb[2]);
+	
+							#ifdef DEBUG
+								Serial.print("LED ");
+								Serial.print(myLEDs[i][j][k].ledNum);
+								Serial.println("'s new values set!");
+	
+								Serial.print("RED");
+								Serial.print(myLEDs[i][j][k].ledNum);
+								Serial.print(": ");
+								Serial.println(myLEDs[i][j][k].rgb[0]);
+			
+								Serial.print("GREEN");
+								Serial.print(myLEDs[i][j][k].ledNum);
+								Serial.print(": ");
+								Serial.println(myLEDs[i][j][k].rgb[1]);
+			
+								Serial.print("BLUE");
+								Serial.print(myLEDs[i][j][k].ledNum);
+								Serial.print(": ");
+								Serial.println(myLEDs[i][j][k].rgb[2]);
+								Serial.println();
+							#endif
+						}
+					}
+				}
+				CCD.write();
+	
+				if(direction == "right"){
+					col++;
+				}
+				else if(direction == "left"){
+					col--;
+				}
+	
+				delay(holdDelay);
+			}
 		}
 	}
 }
