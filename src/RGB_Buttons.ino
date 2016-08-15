@@ -1,5 +1,5 @@
 #include <Adafruit_TLC5947.h>
-#include "RGB_Button_Arduino.h"
+#include "RGB_Buttons.h"
 
 //#define DEBUG
 
