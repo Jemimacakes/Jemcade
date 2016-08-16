@@ -428,7 +428,7 @@ Outputs: none
 Description: blinkDown blinks each color down once each per loop.
 *****************************************************************/
 void blinkDown(int numLoops, int holdDelay, String direction){
-	int col;
+	int col = 0;
 	for(int loop = 0; loop < numLoops; loop++){
 		for(int color = 0; color < 3; color++){
 			if(direction == "right"){
