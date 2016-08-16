@@ -371,6 +371,28 @@ void zigZag(int numLoops, int transDelay, int holdDelay, Speed speed){
 			
 							CCD.setLED(myLEDs[i][j][k].ledNum, myLEDs[i][j][k].rgb[0],      // Set LED RGB values in TLC5947
 									   myLEDs[i][j][k].rgb[1], myLEDs[i][j][k].rgb[2]);
+
+							#ifdef DEBUG
+								Serial.print("LED ");
+								Serial.print(myLEDs[i][j][k].ledNum);
+								Serial.println("'s new values set!");
+	
+								Serial.print("RED");
+								Serial.print(myLEDs[i][j][k].ledNum);
+								Serial.print(": ");
+								Serial.println(myLEDs[i][j][k].rgb[0]);
+			
+								Serial.print("GREEN");
+								Serial.print(myLEDs[i][j][k].ledNum);
+								Serial.print(": ");
+								Serial.println(myLEDs[i][j][k].rgb[1]);
+			
+								Serial.print("BLUE");
+								Serial.print(myLEDs[i][j][k].ledNum);
+								Serial.print(": ");
+								Serial.println(myLEDs[i][j][k].rgb[2]);
+								Serial.println();
+							#endif
 						}
 					}
 				}
