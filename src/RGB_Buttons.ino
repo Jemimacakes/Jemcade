@@ -4,13 +4,16 @@
 //#define DEBUG
 
 #define numBoards 1                                                             // Number of linked TLC5947s
-#define rows 2																	// Number of rows on the CCD
-#define cols 4																	// Number of cols on the CCD
+#define rows 2                                                                  // Number of rows on the CCD
+#define cols 4                                                                  // Number of cols on the CCD
 
 #define clk 4                                                                   // Data clock
 #define dout 5                                                                  // Data output to CCD
 #define lat 6                                                                   // Data latch signal
 #define oe_n -1                                                                 // Data output enable
+
+#define player1LED 7                                                            // Player 1 LED pin
+#define player2LED 8                                                            // Player 2 LED pin
 
 
 Adafruit_TLC5947 CCD(numBoards, clk, dout, lat);                                // Instantiate TLC5947 constant current driver
@@ -42,14 +45,19 @@ void setup(){
 		digitalWrite(oe_n, LOW);                                                // Hold it low
 	}
 
+	pinMode(player1LED, OUTPUT);                                                // Enable the pin as an output
+	pinMode(player2LED, OUTPUT);                                                // Enable the pin as an output
+	digitalWrite(player1LED, HIGH);                                             // Turn them on
+	digitalWrite(player2LED, HIGH);                                             // Turn them on
+
 	// Initialize LEDs //
 	for(int i = 0; i < numBoards; i++){
 		for(int j = 0; j < rows; j++){
 			for(int k = 0; k < cols; k++){
 				/******************************************* 
 					Apply this numbering scheme to the LEDs:
-				    7  6  5  4		15 14 13 12
-					0  1  2  3		 8  9 10 11
+					7  6  5  4      15 14 13 12
+					0  1  2  3       8  9 10 11
 				********************************************/
 				if(j % 2 == 0){
 					myLEDs[i][j][k].ledNum = (8 * (i + 1)) - (1 + k);
@@ -327,7 +335,7 @@ void flow(int numLoops, int transDelay, int holdDelay, Speed speed, String direc
 				}
 			}
 
-			delay(holdDelay);													// Delay before starting next color change
+			delay(holdDelay);                                                   // Delay before starting next color change
 		}
 	}
 }
